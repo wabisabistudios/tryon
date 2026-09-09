@@ -269,7 +269,8 @@ export default {
       }
       if (url.pathname === "/api/tryon/stats/public" && request.method === "GET") {
         const painted = parseInt((await env.TRYON.get("tryon:stats:painted")) || "0", 10);
-        return json({ painted }, 200, cors);
+        const staff = Boolean(env.STAFF_PIN && request.headers.get("X-Staff-Pin") === env.STAFF_PIN);
+        return json({ painted, staff }, 200, cors);
       }
       if (url.pathname === "/api/tryon/otp/send" && request.method === "POST") {
         return await handleOtpSend(request, env, cors);
@@ -831,7 +832,41 @@ async function handleRecordPage(id, url, env) {
       </div>
       <a class="cta" href="https://basedaesthetics.co/tryon">Try it on YOUR hand →</a>
       <p class="foot">Based Aesthetics · Kilpauk · Chennai · basedaesthetics.co/tryon</p>
-    </div>`;
+      <details class="staff"><summary>Staff</summary>
+        <div class="staffin">
+          <input id="pin" type="password" inputmode="numeric" placeholder="Staff PIN" autocomplete="off">
+          <input id="afterFile" type="file" accept="image/*">
+          <button id="markBtn">${meta.painted ? "Update after-photo" : "Mark painted"}</button>
+          <p id="staffMsg"></p>
+        </div>
+      </details>
+    </div>
+    <script>
+    (function(){
+      var btn=document.getElementById("markBtn"), msg=document.getElementById("staffMsg");
+      var file=document.getElementById("afterFile"), pin=document.getElementById("pin");
+      function downscale(f,max){return new Promise(function(res,rej){var i=new Image();i.onload=function(){
+        var s=Math.min(1,max/Math.max(i.width,i.height));var c=document.createElement("canvas");
+        c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);
+        c.getContext("2d").drawImage(i,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",0.85));};
+        i.onerror=rej;i.src=URL.createObjectURL(f);});}
+      btn.onclick=async function(){
+        msg.textContent="";
+        if(!pin.value){msg.textContent="PIN first.";return;}
+        btn.disabled=true;btn.textContent="Saving…";
+        try{
+          var body={};
+          if(file.files&&file.files[0]) body.image=await downscale(file.files[0],1024);
+          var r=await fetch("/api/tryon/records/${meta.id}/painted",{method:"POST",
+            headers:{"Content-Type":"application/json","X-Staff-Pin":pin.value},body:JSON.stringify(body)});
+          var d=await r.json();
+          if(!r.ok){msg.textContent=d.error||"Failed.";}
+          else{msg.textContent="Done — the record now shows painted.";setTimeout(function(){location.reload();},900);}
+        }catch(e){msg.textContent="Connection dropped. Try again.";}
+        btn.disabled=false;btn.textContent="${meta.painted ? "Update after-photo" : "Mark painted"}";
+      };
+    })();
+    </script>`;
   return new Response(pageShell(title, desc, img, body, url), { headers: { "Content-Type": "text/html;charset=UTF-8", "Cache-Control": "public, max-age=300" } });
 }
 
@@ -861,6 +896,12 @@ body{margin:0;background:#F8F3E8;color:#26190F;font-family:'Instrument Sans',san
 .row .price{font-family:'Young Serif',serif;font-size:22px;color:#A8352C}
 .cta{display:block;background:#1E2C1A;color:#F8F3E8;text-align:center;text-decoration:none;font-weight:600;font-size:17px;padding:18px;margin:14px 18px;border-radius:100px;box-shadow:4px 4px 0 #A8352C}
 .foot{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;text-align:center;opacity:.6;padding:0 12px 18px}
+.staff{margin:0 18px 18px;border-top:1.5px dashed rgba(38,25,15,.25);padding-top:10px}
+.staff summary{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.45;cursor:pointer}
+.staffin{display:grid;gap:8px;padding-top:10px}
+.staffin input{border:2px solid #26190F;border-radius:10px;background:#F8F3E8;padding:10px;font-size:15px}
+.staffin button{background:#A8352C;color:#F8F3E8;border:none;border-radius:100px;padding:12px;font-weight:600;font-size:14px}
+.staffin p{font-size:12.5px;color:#A8352C;margin:0;min-height:16px}
 </style></head><body>${body || ""}</body></html>`;
 }
 
