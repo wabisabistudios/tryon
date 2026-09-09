@@ -1,0 +1,22 @@
+name = "based-tryon"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+routes = [
+  { pattern = "basedaesthetics.co/api/tryon*", zone_name = "basedaesthetics.co" }
+]
+
+# wrangler kv namespace create TRYON  →  paste the id below
+[[kv_namespaces]]
+binding = "TRYON"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+DAILY_RENDER_CAP = "400"
+SESSION_RENDER_CAP = "6"
+# GHL_LOCATION_ID = ""     # unset = booking falls back to the widget link
+# GHL_CALENDAR_ID = ""
+
+# Secrets (never in this file):
+#   wrangler secret put GEMINI_API_KEY
+#   wrangler secret put GHL_API_KEY
