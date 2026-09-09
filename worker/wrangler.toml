@@ -3,7 +3,9 @@ main = "worker.js"
 compatibility_date = "2026-07-01"
 
 routes = [
-  { pattern = "basedaesthetics.co/api/tryon*", zone_name = "basedaesthetics.co" }
+  { pattern = "basedaesthetics.co/api/tryon*", zone_name = "basedaesthetics.co" },
+  # Shareable Fitting Records (/r/TR-…). Check nothing else on the zone claims /r/*.
+  { pattern = "basedaesthetics.co/r/*", zone_name = "basedaesthetics.co" }
 ]
 
 # wrangler kv namespace create TRYON  →  paste the id below
@@ -11,12 +13,26 @@ routes = [
 binding = "TRYON"
 id = "REPLACE_WITH_KV_NAMESPACE_ID"
 
+# wrangler r2 bucket create based-tryon  →  records images live here
+[[r2_buckets]]
+binding = "TRYON_R2"
+bucket_name = "based-tryon"
+
 [vars]
-DAILY_RENDER_CAP = "400"
-SESSION_RENDER_CAP = "6"
-# GHL_LOCATION_ID = ""     # unset = booking falls back to the widget link
+DAILY_RENDER_CAP = "400"        # global kill-switch ≈ worst-case daily render spend
+ANON_RENDER_CAP = "2"           # free previews before WhatsApp verification
+VERIFIED_DAILY_CAP = "6"        # per verified phone per day
+RECORD_PRICE_HOLD_DAYS = "7"    # how long a Fitting Record holds its quoted price
+# OTP_DEV = "true"              # LOCAL ONLY — returns the OTP in the response when no WhatsApp provider is set
+# DEV_MOCK = "true"             # LOCAL ONLY — skips Gemini, returns a labelled placeholder render
+# WA_OTP_TEMPLATE = "tryon_otp" # WhatsApp utility template with one body variable (the code)
+# GHL_LOCATION_ID = ""          # unset = booking falls back to the widget link
 # GHL_CALENDAR_ID = ""
 
 # Secrets (never in this file):
 #   wrangler secret put GEMINI_API_KEY
 #   wrangler secret put GHL_API_KEY
+#   wrangler secret put SESSION_SECRET     # any long random string — signs verified-session tokens
+#   wrangler secret put STAFF_PIN          # kiosk mode + marking records "painted"
+#   wrangler secret put WA_TOKEN           # Meta WhatsApp Cloud API token (OTP)
+#   wrangler secret put WA_PHONE_ID        # WhatsApp phone number id
