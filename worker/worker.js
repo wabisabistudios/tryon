@@ -736,6 +736,7 @@ async function handleRecordSave(request, env, cors) {
   };
 
   const { b64 } = splitDataUrl(image);
+  if (!b64) return json({ error: "The rendered image could not be read." }, 400, cors);
   const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
   await Promise.all([
     env.TRYON_R2.put(`records/${renderId}.jpg`, bytes, { httpMetadata: { contentType: "image/jpeg" } }),
