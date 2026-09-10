@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<title>Nail Price Calculator — Based Aesthetics, Kilpauk</title>
+<meta name="description" content="Build your nail set, see the exact price, then try it on your own hand before you book. Based Aesthetics, Kilpauk, Chennai.">
+<meta property="og:title" content="Nail Price Calculator — Based Aesthetics">
+<meta property="og:description" content="Build your nail set, see the price, then try it on your own hand.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://basedaesthetics.co/calculator">
+<link rel="canonical" href="https://basedaesthetics.co/calculator">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1027912353039149');fbq('track','PageView');fbq('track','ViewContent',{content_name:'calculator'});
+</script>
+<style>
+:root{color-scheme:only light;--ivory:#F8F3E8;--ink:#26190F;--red:#A8352C;--marigold:#E3AB36;--forest:#1E2C1A;--cream:#F1E8D6;--hairline:rgba(38,25,15,.2);--serif:'Young Serif',serif;--sans:'Instrument Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--spring:cubic-bezier(.34,1.56,.64,1)}
+@media (prefers-color-scheme: dark){:root{color-scheme:only light} html,body{background:var(--ivory);color:var(--ink)}}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--ivory);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:700px;margin:0 auto;padding:0 20px;position:relative}
+
+.topbar{padding:16px 0;border-bottom:2px solid var(--ink)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center}
+.wordmark{font-family:var(--serif);font-size:16px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+.loc{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--ivory);padding:5px 10px;border-radius:100px}
+
+.ribbon{background:var(--red);color:var(--ivory);text-align:center;padding:9px 14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+.ribbon b{color:var(--marigold);font-weight:600}
+
+.hero{padding:44px 0 38px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,7.6vw,46px);line-height:1.08;margin-bottom:12px}
+.hero p{font-size:16px;line-height:1.55;max-width:42ch;opacity:.92}
+.hero a{color:var(--red);font-weight:600}
+
+.card{border:2.5px solid var(--ink);border-radius:18px;background:var(--ivory);box-shadow:7px 7px 0 var(--forest);margin-bottom:28px;overflow:hidden}
+.card .head{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:14px 18px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:center;background:var(--cream)}
+.card .body{padding:22px 18px 26px}
+.card h2{font-family:var(--serif);font-weight:400;font-size:22px;margin-bottom:8px}
+.card .sub{font-size:13.5px;opacity:.72;margin-bottom:20px;line-height:1.45}
+
+.step{margin-bottom:28px}
+.step:last-child{margin-bottom:0}
+.step h3{font-family:var(--serif);font-weight:400;font-size:18px;margin-bottom:6px}
+.step p{font-size:12.5px;opacity:.65;margin-bottom:12px;max-width:48ch;line-height:1.4}
+
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{background:var(--ivory);border:2px solid var(--ink);border-radius:100px;padding:10px 16px;font-size:14px;transition:transform .15s var(--spring)}
+.opt:hover{transform:rotate(-2deg)}
+.opt.on{background:var(--marigold);box-shadow:2px 2px 0 var(--ink);font-weight:600}
+
+.colrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(min-width:560px){.colrow{grid-template-columns:repeat(6,1fr)}}
+.colsw{display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);border-radius:50%;width:100%;aspect-ratio:1;position:relative;background:var(--ivory)}
+.colsw.on{box-shadow:0 0 0 2px var(--ivory),0 0 0 5px var(--red)}
+.colsw::after{content:"";display:block;width:66%;height:66%;border-radius:50%;background:var(--c);border:1.5px solid rgba(38,25,15,.25)}
+
+.shades{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 10px}
+@media(min-width:560px){.shades{grid-template-columns:repeat(4,1fr)}}
+.shade{background:var(--ivory);border:2px solid transparent;border-radius:16px;padding:10px;transition:transform .15s var(--spring),border-color .15s}
+.shade:hover{transform:scale(1.02)}
+.shade.sel{border-color:var(--red);background:var(--cream)}
+.shade .chip{width:100%;aspect-ratio:1;border-radius:12px;border:2px solid var(--ink);margin-bottom:10px;box-shadow:3px 3px 0 var(--marigold)}
+.shade .nm{font-family:var(--serif);font-size:14px}
+.shade .tag{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);opacity:.8;margin-top:2px}
+
+.checks{display:grid;gap:10px}
+.check{display:flex;gap:10px;align-items:flex-start;background:var(--cream);border:2px solid var(--ink);border-radius:14px;padding:14px}
+.check input{width:20px;height:20px;accent-color:var(--red);margin-top:1px}
+.check label{font-size:14px;line-height:1.35}
+.check label b{display:block;font-size:15px;margin-bottom:2px}
+
+.summary{background:var(--forest);color:var(--ivory);padding:22px 18px;border-top:2px solid var(--ink)}
+.summary .row{display:flex;justify-content:space-between;gap:14px;font-size:14px;margin-bottom:8px;opacity:.85}
+.summary .row .v{font-family:var(--mono);font-size:12px;letter-spacing:.08em}
+.summary .total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px dashed rgba(248,243,232,.25);padding-top:14px;margin-top:14px}
+.summary .total .price{font-family:var(--serif);font-size:40px;color:var(--marigold);line-height:1}
+.summary .total .price span{font-size:18px;opacity:.7}
+.summary .note{font-size:12.5px;line-height:1.45;margin-top:12px;opacity:.8}
+
+.cta{display:block;background:var(--red);color:var(--ivory);border:none;border-radius:100px;font-weight:600;font-size:18px;padding:18px;text-align:center;text-decoration:none;box-shadow:4px 4px 0 var(--forest);transition:transform .15s var(--spring)}
+.cta:hover{transform:translate(-1px,-2px)}
+.cta-wrap{padding:0 18px 18px}
+
+.share{border:2px dashed var(--ink);border-radius:16px;padding:14px 16px;text-align:center;background:var(--cream);margin-top:14px;display:none}
+.share.show{display:block}
+.share p{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;margin-bottom:8px}
+.share button{background:var(--forest);color:var(--ivory);border:none;border-radius:100px;padding:10px 16px;font-size:13px;font-weight:600}
+
+.footer{background:var(--forest);color:var(--ivory);padding:26px 0 44px;margin-top:40px}
+.footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+
+.disclaimer{font-size:11.5px;line-height:1.45;opacity:.65;padding:0 18px 18px}
+</style>
+</head>
+<body>
+<div class="ribbon">Any design · <b>₹2,999</b> · Art, chrome, cat-eye, ombré, glitter — on gel</div>
+
+<header class="topbar"><div class="wrap">
+  <a class="wordmark" href="https://basedaesthetics.co">Based Aesthetics</a>
+  <span class="loc">Kilpauk · Chennai</span>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <h1>Build your set.<br>See the exact price.</h1>
+  <p>Then try it on your own hand before anyone touches a file. <a href="tryon.html">Go to Try-On →</a></p>
+</div></section>
+
+<div class="wrap">
+  <div class="card">
+    <div class="head"><span>Price Calculator</span><span id="badge" style="color:var(--red)">Step 1 of 4</span></div>
+    <div class="body">
+
+      <div class="step" id="step-base">
+        <h3>1. What do you want done?</h3>
+        <p>This sets the base service and price.</p>
+        <div class="opts" id="baseOpts"></div>
+      </div>
+
+      <div class="step" id="step-finish" style="display:none">
+        <h3>2. Finish</h3>
+        <p>Finish can upgrade plain polish to the Any-Design rate.</p>
+        <div class="opts" id="finishOpts"></div>
+      </div>
+
+      <div class="step" id="step-colour" style="display:none">
+        <h3>3. Gel colour</h3>
+        <p>Choose a shade. These are the salon's real polish options.</p>
+        <div class="shades" id="colourOpts"></div>
+      </div>
+
+      <div class="step" id="step-art" style="display:none">
+        <h3>4. Nail art</h3>
+        <p>French tips and micro lines are priced as Gel French. Other art moves you to Any-Design ₹2,999.</p>
+        <div class="opts" id="artOpts"></div>
+        <div id="artColourStep" style="display:none;margin-top:14px">
+          <p style="font-size:12.5px;opacity:.65;margin-bottom:10px">Art colour</p>
+          <div class="colrow" id="artColourOpts"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="summary">
+      <div class="row"><span>Base service</span><span class="v" id="sumBase">—</span></div>
+      <div class="row" id="sumFinishRow"><span>Finish</span><span class="v" id="sumFinish">—</span></div>
+      <div class="row" id="sumColourRow"><span>Colour</span><span class="v" id="sumColour">—</span></div>
+      <div class="row" id="sumArtRow"><span>Art</span><span class="v" id="sumArt">—</span></div>
+      <div class="total"><span>Estimated total</span><span class="price"><span>₹</span><span id="sumPrice">0</span></span></div>
+      <p class="note" id="sumNote">Extensions and heavy custom art are confirmed in the chair.</p>
+    </div>
+    <div class="cta-wrap">
+      <a class="cta" id="tryonLink" href="tryon.html">Try this set on my hand →</a>
+      <div class="share" id="shareBox">
+        <p>Send this quote to someone</p>
+        <button id="shareBtn">Share on WhatsApp</button>
+      </div>
+    </div>
+    <p class="disclaimer">Prices are correct at the time of calculation and held for 7 days on a saved Fitting Record. Final confirmation happens in the chair. Not a substitute for in-person consultation.</p>
+  </div>
+</div>
+
+<div class="footer"><div class="wrap">
+  <span>What we can't sterilise, we don't reuse</span>
+  <span>basedaesthetics.co</span>
+</div></footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const CONFIG={API:"/api/tryon"};
+let PRICING=null;
+const STATE={base:null,finish:"gloss",colour:null,art:"none",artColour:"white"};
+
+const FALLBACK={
+  tiers:{"gel-polish":{service:"Gel Polish — Hands",price:1000,label:"₹1,000"},"gel-french":{service:"Gel French",price:1300,label:"₹1,300"},"any-design":{service:"Any Design — Art · Chrome · Ombré · Glitter",price:2999,label:"₹2,999",campaign:true,was:"₹3,500"}},
+  extras:{removal:{name:"Old gel/polish removal",price:300,label:"₹300"}},
+  finishes:{gloss:{label:"Gloss",tier:null},matte:{label:"Matte",tier:null},glazed:{label:"Glazed",tier:"any-design"},chrome:{label:"Chrome",tier:"any-design"},"cat-eye":{label:"Cat Eye",tier:"any-design"},ombre:{label:"Ombré",tier:"any-design"}},
+  arts:{none:{label:"None",tier:null},french:{label:"French tip",tier:"gel-french"},"micro-french":{label:"Micro French",tier:"gel-french"},line:{label:"Fine line",tier:"any-design"},dots:{label:"Dots",tier:"any-design"},"glitter-fade":{label:"Glitter fade",tier:"any-design"}},
+  artColours:{white:{label:"White",hex:"#F7F4EE"},marigold:{label:"Marigold",hex:"#E3AB36"},ink:{label:"Ink",hex:"#26190F"},gold:{label:"Gold",hex:"#C9A227"},silver:{label:"Silver",hex:"#C0C4CC"},cherry:{label:"Cherry",hex:"#5C1218"}},
+  shades:[
+    {id:"cherry-noir",name:"Cherry Noir",hex:"#5C1218",undertone:"warm"},{id:"milk-glaze",name:"Milk Glaze",hex:"#F2EBE0",undertone:"neutral"},{id:"terracotta",name:"Terracotta",hex:"#B85C38",undertone:"warm"},
+    {id:"classic-white",name:"Classic White",hex:"#F7F4EE",undertone:"neutral"},{id:"emerald",name:"Emerald",hex:"#1E5C46",undertone:"cool"},{id:"plum",name:"Plum",hex:"#5C2E4A",undertone:"cool"}
+  ]
+};
+
+const BASES=[
+  {key:"gel-polish",label:"Gel polish on natural nails",desc:"Single colour, gloss or matte finish"},
+  {key:"gel-french",label:"French / micro French",desc:"Classic French or micro-line tip"},
+  {key:"any-design",label:"Any-design art set",desc:"Chrome, cat-eye, ombré, glitter, minimal art"},
+];
+
+async function loadPricing(){
+  try{
+    const r=await fetch(CONFIG.API+"/pricing");
+    if(r.ok){ PRICING=await r.json(); }
+  }catch(e){ console.error(e); }
+  if(!PRICING) PRICING=FALLBACK;
+  init();
+}
+
+function p(path){ return path.split('.').reduce((o,k)=>o?.[k], PRICING); }
+
+function init(){
+  // base
+  $("baseOpts").innerHTML = BASES.map(b=>`<button class="opt ${STATE.base===b.key?'on':''}" data-k="${b.key}"><b>${b.label}</b></button>`).join("");
+  $("baseOpts").querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{ STATE.base=btn.dataset.k; if(STATE.base==="gel-french"){STATE.art="french";STATE.finish="gloss";} if(STATE.base==="gel-polish"){STATE.art="none";} if(STATE.base==="any-design"){STATE.finish="chrome";STATE.art="line";} if(!STATE.colour) STATE.colour=PRICING.shades[0]?.id; render(); });
+
+  // finish
+  $("finishOpts").innerHTML = Object.entries(p("finishes")||{}).map(([k,f])=>`<button class="opt ${STATE.finish===k?'on':''}" data-k="${k}">${f.label}</button>`).join("");
+  $("finishOpts").querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{ STATE.finish=btn.dataset.k; render(); });
+
+  // colour
+  $("colourOpts").innerHTML = (PRICING.shades||[]).map(s=>`
+    <button class="shade ${STATE.colour===s.id?'sel':''}" data-id="${s.id}">
+      <span class="chip" style="background:${s.hex}"></span>
+      <span class="nm">${s.name}</span>
+      <span class="tag">${s.undertone}</span>
+    </button>`).join("");
+  $("colourOpts").querySelectorAll(".shade").forEach(btn=>btn.onclick=()=>{ STATE.colour=btn.dataset.id; render(); });
+
+  // art
+  $("artOpts").innerHTML = Object.entries(p("arts")||{}).map(([k,a])=>`<button class="opt ${STATE.art===k?'on':''}" data-k="${k}">${a.label}</button>`).join("");
+  $("artOpts").querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{ STATE.art=btn.dataset.k; render(); });
+
+  // art colour
+  $("artColourOpts").innerHTML = Object.entries(p("artColours")||{}).map(([k,c])=>`<button class="colsw ${STATE.artColour===k?'on':''}" data-k="${k}" style="--c:${c.hex}" aria-label="${c.label}"></button>`).join("");
+  $("artColourOpts").querySelectorAll(".colsw").forEach(btn=>btn.onclick=()=>{ STATE.artColour=btn.dataset.k; render(); });
+
+  // try-on link
+  $("tryonLink").onclick=()=>{
+    fbq('track','InitiateCheckout',{content_name:'calculator'});
+  };
+  $("shareBtn").onclick=shareQuote;
+
+  // initial
+  if(!STATE.base) STATE.base="gel-polish";
+  if(!STATE.colour) STATE.colour=PRICING.shades[0]?.id;
+  render();
+}
+
+function tierOrder(){ return ["gel-polish","gel-french","any-design"]; }
+function calcTier(){
+  if(STATE.base==="any-design") return "any-design";
+  let t=STATE.base||"gel-polish";
+  const fin=p(`finishes.${STATE.finish}.tier`);
+  const art=p(`arts.${STATE.art}.tier`);
+  for(const k of [fin,art]){ if(k && tierOrder().indexOf(k)>tierOrder().indexOf(t)) t=k; }
+  return t;
+}
+function calcPrice(){
+  const tier=calcTier();
+  return p(`tiers.${tier}.price`) || 0;
+}
+function calcLabel(){
+  const tier=calcTier();
+  return p(`tiers.${tier}.label`) || "₹0";
+}
+function calcService(){
+  const tier=calcTier();
+  return p(`tiers.${tier}.service`) || "";
+}
+
+function builderSpec(){
+  const finish=STATE.finish; const art=STATE.art; const shade=STATE.colour; const artColour=STATE.artColour;
+  return { shadeId:shade, finish, art, artColour };
+}
+
+function render(){
+  // visibility
+  $("step-finish").style.display = STATE.base==="gel-polish"?"block":"none";
+  $("step-colour").style.display = STATE.base?"block":"none";
+  $("step-art").style.display = STATE.base?"block":"none";
+
+  // update selections
+  $("baseOpts").querySelectorAll(".opt").forEach(b=>b.classList.toggle("on", b.dataset.k===STATE.base));
+  $("finishOpts").querySelectorAll(".opt").forEach(b=>b.classList.toggle("on", b.dataset.k===STATE.finish));
+  $("colourOpts").querySelectorAll(".shade").forEach(b=>b.classList.toggle("sel", b.dataset.id===STATE.colour));
+  $("artOpts").querySelectorAll(".opt").forEach(b=>b.classList.toggle("on", b.dataset.k===STATE.art));
+  $("artColourStep").style.display = STATE.art!=="none"?"block":"none";
+  $("artColourOpts").querySelectorAll(".colsw").forEach(b=>b.classList.toggle("on", b.dataset.k===STATE.artColour));
+
+  // summary
+  const tier=calcTier();
+  const t=p(`tiers.${tier}`);
+  $("sumBase").textContent = BASES.find(b=>b.key===STATE.base)?.label || "—";
+  $("sumFinishRow").style.display = STATE.base==="gel-polish"?"flex":"none";
+  $("sumFinish").textContent = p(`finishes.${STATE.finish}.label`);
+  $("sumColourRow").style.display = STATE.colour?"flex":"none";
+  $("sumColour").textContent = (PRICING.shades||[]).find(s=>s.id===STATE.colour)?.name || "—";
+  $("sumArtRow").style.display = STATE.art&&STATE.art!=="none"?"flex":"none";
+  $("sumArt").textContent = [p(`arts.${STATE.art}.label`), p(`artColours.${STATE.artColour}.label`)].filter(Boolean).join(" · ");
+
+  const priceNum = calcPrice();
+  $("sumPrice").textContent = priceNum.toLocaleString("en-IN");
+  $("sumNote").textContent = t?.campaign
+    ? `Any-design rate (was ${t.was}). Final art complexity confirmed in the chair.`
+    : "Price confirmed at the counter. Extensions priced in the chair.";
+
+  // badge
+  let step=1; if(STATE.base) step++; if(STATE.colour) step++; if(STATE.art!==undefined) step++;
+  $("badge").textContent = `Step ${Math.min(step,4)} of 4`;
+
+  // try-on link with builder params
+  const spec = builderSpec();
+  const params = new URLSearchParams();
+  params.set("mode","builder");
+  params.set("shade",spec.shadeId);
+  params.set("finish",spec.finish);
+  params.set("art",spec.art);
+  if(spec.art!=="none") params.set("artColour",spec.artColour);
+  params.set("price",priceNum);
+  $("tryonLink").href = "tryon.html?"+params.toString();
+
+  $("shareBox").classList.add("show");
+}
+
+function shareQuote(){
+  const text = encodeURIComponent(`Nail set quote from Based Aesthetics — ${calcLabel()}\n${BASES.find(b=>b.key===STATE.base)?.label}\nTry it on your own hand: https://basedaesthetics.co/tryon.html?${new URLSearchParams({mode:"builder",shade:STATE.colour,finish:STATE.finish,art:STATE.art,artColour:STATE.artColour,price:calcPrice()}).toString()}`);
+  window.open(`https://wa.me/?text=${text}`, "_blank");
+}
+
+loadPricing();
+</script>
+</body>
+</html>
