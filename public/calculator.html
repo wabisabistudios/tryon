@@ -258,9 +258,9 @@ const FALLBACK={
   ],
   accessories:{
     crystals:{label:"Crystals / rhinestones",options:[{key:"crystal-few",label:"A few accent crystals",price:150},{key:"crystal-full",label:"Full crystal feature nail",price:300},{key:"crystal-10",label:"10+ crystals across set",price:500}]},
-    charms:{label:"Charms / 3D elements",options:[{key:"charm-1",label:"1 small charm / bow",price:200},{key:"charm-3",label:"3 small charms",price:450},{key:"charm-feature",label:"Charm on every nail",price:900}]},
+    charms:{label:"Charms / 3D elements",options:[{key:"charm-1",label:"1 small charm / bow",price:250},{key:"charm-3",label:"3 small charms",price:500},{key:"charm-feature",label:"Charm on every nail",price:950}]},
     foil:{label:"Foil / chrome accents",options:[{key:"foil-accent",label:"Foil accent nail",price:150},{key:"foil-half",label:"Foil on half the set",price:400},{key:"foil-full",label:"Foil on full set",price:700}]},
-    other:{label:"Other",options:[{key:"studs",label:"Metal studs",price:200},{key:"pearls",label:"Pearl accents",price:250},{key:"matte-top",label:"Matte top coat over art",price:200},{key:"jelly",label:"Jelly / sheer builder layer",price:300}]}
+    other:{label:"Other",options:[{key:"studs",label:"Metal studs",price:200},{key:"pearls",label:"Pearl accents",price:250},{key:"matte-top",label:"Matte top coat over art",price:150},{key:"jelly",label:"Jelly / sheer builder layer",price:300}]}
   }
 };
 
@@ -351,11 +351,16 @@ function init(){
 
 function setMode(m){
   STATE.mode=m;
+  if(m==="inspo"){
+    // Manual add-ons don't carry into an AI-quoted inspiration design.
+    STATE.accessories={};
+  }
   $("modeInspo").classList.toggle("on", m==="inspo");
   $("modeManual").classList.toggle("on", m==="manual");
   $("pane-inspo").style.display=m==="inspo"?"block":"none";
   $("pane-manual").style.display=m==="manual"?"block":"none";
   $("badge").textContent = m==="inspo"?"Inspiration mode":"Manual build";
+  renderAccessories();
   render();
 }
 
