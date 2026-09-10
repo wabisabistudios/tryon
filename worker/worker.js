@@ -83,6 +83,30 @@ const PRICING = {
     silver:   { label: "Silver",   hex: "#C0C4CC" },
     cherry:   { label: "Cherry",   hex: "#5C1218" },
   },
+  // Add-ons quoted by the calculator. Renders quote the service tier only.
+  accessories: {
+    crystals: { label: "Crystals / rhinestones", options: [
+      { key: "crystal-few",   label: "A few accent crystals",        price: 150 },
+      { key: "crystal-full",  label: "Full crystal feature nail",    price: 300 },
+      { key: "crystal-10",    label: "10+ crystals across set",       price: 500 },
+    ]},
+    charms: { label: "Charms / 3D elements", options: [
+      { key: "charm-1",       label: "1 small charm / bow",          price: 250 },
+      { key: "charm-3",       label: "3 small charms",               price: 500 },
+      { key: "charm-feature", label: "Charm on every nail",          price: 950 },
+    ]},
+    foil: { label: "Foil / chrome accents", options: [
+      { key: "foil-accent",   label: "Foil accent nail",             price: 150 },
+      { key: "foil-half",     label: "Foil on half the set",         price: 400 },
+      { key: "foil-full",     label: "Foil on full set",             price: 700 },
+    ]},
+    other: { label: "Other", options: [
+      { key: "studs",         label: "Metal studs",                  price: 200 },
+      { key: "pearls",        label: "Pearl accents",                price: 250 },
+      { key: "matte-top",     label: "Matte top coat over art",      price: 150 },
+      { key: "jelly",         label: "Jelly / sheer builder layer",  price: 300 },
+    ]},
+  },
 };
 
 const TIER_ORDER = ["gel-polish", "gel-french", "any-design"];
