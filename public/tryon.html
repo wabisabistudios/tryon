@@ -818,7 +818,6 @@ function setLang(l){
   $("verifyBanner").innerHTML=d.verifyBanner;
   $("verifyNow").onclick=openOtpSheet;
   $("verifyLeft").textContent=S.remaining;
-  setText("otpSheet").querySelector("h3") && setText("otpSheet").querySelector("h3").textContent = d.otpTitle;
   // OTP labels
   $("otpSheet").querySelector("h3").textContent=d.otpTitle;
   $("otpSheet").querySelector(".when").childNodes[0].textContent=d.otpSent+" ";
