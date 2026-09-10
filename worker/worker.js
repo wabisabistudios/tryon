@@ -289,6 +289,7 @@ export default {
           arts: mapVals(PRICING.arts, (a) => ({ label: a.label, tier: a.tier })),
           artColours: PRICING.artColours,
           shades: Object.entries(SHADES).map(([id, s]) => ({ id, ...s })),
+          accessories: PRICING.accessories,
         }, 200, cors);
       }
       if (url.pathname === "/api/tryon/stats/public" && request.method === "GET") {
