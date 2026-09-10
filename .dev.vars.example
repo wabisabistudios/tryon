@@ -1,3 +1,8 @@
 # copy to worker/.dev.vars for `wrangler dev` (gitignored — never commit real keys)
 GEMINI_API_KEY=
 GHL_API_KEY=
+SESSION_SECRET=local-dev-secret-change-me
+STAFF_PIN=1234
+# WhatsApp Cloud API (OTP). Leave empty locally and set OTP_DEV=true in wrangler.toml [vars] instead.
+WA_TOKEN=
+WA_PHONE_ID=
