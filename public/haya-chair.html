@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<title>Haya Chair — Nail Service Discovery & Consent | Haya Aesthetics & Academy</title>
+<meta name="description" content="Tap your nails, not a paragraph. Haya in-chair discovery, training and consent on the tablet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: only light;
+  --cream:#FAF4EA; --cream2:#F3E9D6; --gold:#C29A3D; --gold2:#B0852C; --goldline:#D9BE7E;
+  --ink:#2B231A; --inksoft:#5A4E3E; --blush:#F3DED9;
+  --green:#5C8A4E; --amber:#D9A53A; --red:#B23A2E;
+  --serif:'Cormorant Garamond',serif; --sans:'Inter',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+@media (prefers-color-scheme: dark){ :root{color-scheme:only light} html,body{background:var(--cream);color:var(--ink)} }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{background:var(--cream);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;color:inherit}
+input,select{font-family:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px;position:relative}
+body{padding-bottom:96px}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--goldline),transparent)}
+.topbar{padding:14px 0 12px;border-bottom:1px solid var(--goldline)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.mark .h{width:34px;height:34px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:19px;color:var(--gold2);font-weight:600;background:var(--cream2)}
+.mark .t b{display:block;font-family:var(--serif);font-weight:600;font-size:15px;line-height:1.05}
+.mark .t span{font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);font-weight:500}
+.topbar .loc{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);text-align:right;line-height:1.4}
+.topbar .loc b{display:block;color:var(--ink);font-weight:600}
+.rail{display:flex;gap:0;padding:14px 0 6px;overflow-x:auto;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail .step{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:58px;opacity:.35;transition:opacity .3s}
+.rail .step .n{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--gold2);background:var(--cream);transition:all .3s var(--spring)}
+.rail .step .l{font-family:var(--mono);font-size:8px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.rail .step.on{opacity:1}
+.rail .step.on .n{background:var(--gold);color:var(--cream);transform:scale(1.12)}
+.rail .step.done .n{background:var(--cream2);color:var(--gold2)}
+.rail .step.done .n::after{content:"✓";font-size:11px}
+.panel{display:none;padding:24px 0 50px}
+.panel.on{display:block;animation:pop .4s var(--spring)}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:none}}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px}
+.panel h2{font-family:var(--serif);font-weight:500;font-size:30px;line-height:1.1;margin-bottom:6px}
+.panel .sub{font-size:14.5px;line-height:1.55;color:var(--inksoft);max-width:46ch;margin-bottom:22px}
+.btn{display:inline-block;background:var(--ink);color:var(--cream);border:none;border-radius:100px;font-weight:600;font-size:15px;padding:15px 28px;box-shadow:3px 3px 0 var(--gold);transition:transform .18s var(--spring),box-shadow .18s var(--spring);text-decoration:none;text-align:center}
+.btn:hover{transform:translate(-1px,-2px);box-shadow:5px 5px 0 var(--gold)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--gold)}
+.btn.block{display:block;width:100%}
+.btn.gold{background:var(--gold);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btn.quiet{background:var(--cream);color:var(--ink);border:1.5px solid var(--ink);box-shadow:none}
+.btn.quiet:hover{background:var(--cream2);box-shadow:none;transform:rotate(-.4deg)}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.navrow{display:flex;gap:10px;margin-top:30px}
+.navrow .btn{flex:1}
+.field{display:block;width:100%;border:1.5px solid var(--ink);border-radius:14px;background:var(--cream);padding:14px 16px;font-size:16px;color:var(--ink);margin-bottom:14px}
+.field::placeholder{color:var(--inksoft);opacity:.6}
+.field:focus{outline:none;box-shadow:3px 3px 0 var(--gold)}
+label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);margin:0 0 6px 4px}
+.choices{display:grid;gap:14px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+@media(max-width:560px){.choices.three{grid-template-columns:1fr 1fr}}
+.choice{position:relative;background:var(--cream2);border:1.5px solid var(--goldline);border-radius:18px;padding:18px 14px 14px;text-align:center;transition:all .2s var(--spring);overflow:hidden}
+.choice:hover{transform:translateY(-3px) rotate(-.4deg)}
+.choice.sel{border-color:var(--gold);box-shadow:0 0 0 3px var(--cream),0 0 0 5px var(--gold);transform:translateY(-3px)}
+.choice .pic{height:96px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.choice .nm{font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.1}
+.choice .pr{font-family:var(--mono);font-size:11px;color:var(--gold2);margin-top:4px;letter-spacing:.04em}
+.choice .ck{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.choice.sel .ck{display:flex;animation:pop .3s var(--spring)}
+.nail{position:relative;width:46px;height:64px;margin:0 auto;border:1.5px solid var(--ink);background:var(--c,#E7C9C2);box-shadow:inset 0 -6px 8px rgba(0,0,0,.12)}
+.nail::after{content:"";position:absolute;top:6px;left:8px;width:11px;height:38%;background:rgba(255,255,255,.5);border-radius:6px;transform:rotate(8deg)}
+.nail.sm{width:34px;height:48px}
+.shp{width:44px;height:62px;margin:0 auto;border:1.5px solid var(--ink);background:var(--blush);position:relative;box-shadow:inset 0 -5px 7px rgba(0,0,0,.1)}
+.shp::after{content:"";position:absolute;top:5px;left:7px;width:10px;height:36%;background:rgba(255,255,255,.55);border-radius:5px;transform:rotate(8deg)}
+.shp.round{border-radius:50% 50% 26px 26px}
+.shp.oval{border-radius:50%}
+.shp.squoval{border-radius:14px 14px 22px 22px}
+.shp.square{border-radius:6px}
+.shp.almond{border-radius:50% 50% 30% 30%/60% 60% 30% 30%}
+.shp.coffin{width:40px;clip-path:polygon(20% 0,80% 0,100% 60%,70% 100%,30% 100%,0 60%)}
+.shp.stiletto{width:34px;border-radius:50% 50% 8px 8px/72% 72% 8% 8%}
+.shp.lipstick{border-radius:6px 50% 8px 8px;transform:skewX(-12deg)}
+.shp.natural{border-radius:30% 30% 24px 24px}
+.toe{width:34px;height:42px;margin:0 auto;border:1.5px solid var(--ink);background:var(--blush);border-radius:14px 14px 18px 18px;box-shadow:inset 0 -4px 6px rgba(0,0,0,.1)}
+.shapegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 12px}
+@media(min-width:560px){.shapegrid{grid-template-columns:repeat(4,1fr)}}
+.shapecard,.lencard,.chip,.descard,.addcard,.polcard,.mapcard,.chkcard,.polcy{position:relative;background:var(--cream2);border:1.5px solid var(--goldline);border-radius:16px;transition:all .2s var(--spring)}
+.shapecard:hover,.lencard:hover,.chip:hover,.descard:hover,.addcard:hover,.polcard:hover,.mapcard:hover,.chkcard:hover{transform:translateY(-3px)}
+.shapecard.sel,.lencard.sel,.chip.sel,.descard.sel,.addcard.sel,.polcard.sel,.mapcard.sel,.chkcard.sel{border-color:var(--gold);box-shadow:0 0 0 3px var(--cream),0 0 0 5px var(--gold)}
+.shapecard{padding:14px 8px 10px;text-align:center}
+.shapecard .shp{margin-bottom:8px}
+.shapecard .nm{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.shapecard .dots{display:flex;justify-content:center;gap:5px;margin-top:8px}
+.shapecard .dots i{width:11px;height:11px;border-radius:50%;border:1px solid var(--inksoft);display:block}
+.lenrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.lenrow::-webkit-scrollbar{display:none}
+.lencard{flex:0 0 auto;min-width:84px;padding:12px 8px 10px;text-align:center}
+.lencard .bar{height:54px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:8px}
+.lencard .bar .shp{width:20px}
+.lencard .nm{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.lencard .mm{font-family:var(--mono);font-size:9px;color:var(--gold2);margin-top:2px}
+.lencard .dot{width:12px;height:12px;border-radius:50%;margin:8px auto 0;border:1px solid var(--inksoft)}
+.dot-g{background:var(--green);border-color:var(--green)!important}
+.dot-a{background:var(--amber);border-color:var(--amber)!important}
+.dot-r{background:var(--red);border-color:var(--red)!important}
+.famtabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.famtabs button{background:var(--cream);border:1.5px solid var(--goldline);border-radius:100px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;color:var(--inksoft);transition:all .15s var(--spring)}
+.famtabs button:hover{transform:rotate(-1deg)}
+.famtabs button.on{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:600}
+.famhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.famhead .ft{font-family:var(--serif);font-size:22px;font-weight:500}
+.famhead .fg{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);max-width:32ch;text-align:right;line-height:1.4}
+.chipgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:14px 10px}
+.chip{padding:10px 6px 8px;text-align:center}
+.chip .nail{margin-bottom:6px}
+.chip .code{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;font-weight:600}
+.ckdot{position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.sel .ckdot{display:flex}
+.desgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:560px){.desgrid{grid-template-columns:repeat(3,1fr)}}
+.descard{padding:14px 10px 10px;text-align:center}
+.descard.locked{opacity:.4;filter:grayscale(.5)}
+.descard .eff{height:60px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.descard .nm{font-family:var(--serif);font-size:16px;font-weight:500}
+.descard .ldots{display:flex;justify-content:center;gap:7px;margin-top:8px}
+.descard .ldots i{width:12px;height:12px;border-radius:50%;border:1px solid var(--inksoft);display:block}
+.addgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+.addcard{padding:12px 8px 10px;text-align:center}
+.addcard .nm{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.addcard .pr{font-family:var(--mono);font-size:9px;color:var(--gold2);margin-top:3px}
+.qtystrip{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.qtystrip button{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--goldline);background:var(--cream);font-family:var(--mono);font-size:13px;font-weight:600;transition:all .15s var(--spring)}
+.qtystrip button:hover{transform:translateY(-2px)}
+.qtystrip button.on{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.mapgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mapcard{padding:14px 10px 10px;text-align:center}
+.mapcard .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px}
+.mapcard .selmini{font-family:var(--serif);font-size:14px;color:var(--inksoft);min-height:18px}
+.mapcard .selmini b{color:var(--ink);font-weight:600}
+.checkgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:560px){.checkgrid{grid-template-columns:repeat(5,1fr)}}
+.chkcard{padding:16px 8px 12px;text-align:center}
+.chkcard .ic{height:48px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.chkcard .nm{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.photogrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.photocard{background:var(--cream2);border:1.5px solid var(--goldline);border-radius:16px;padding:16px;text-align:center}
+.photocard .ph{height:90px;border:1.5px dashed var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--gold2);font-size:30px}
+.photocard .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px}
+.photocard .opts{display:flex;gap:8px;justify-content:center}
+.photocard .opts button{border:1.5px solid var(--ink);border-radius:100px;background:var(--cream);font-family:var(--mono);font-size:10px;padding:8px 12px;letter-spacing:.06em;text-transform:uppercase}
+.photocard .opts button.on{background:var(--ink);color:var(--cream)}
+.sigwrap{margin:22px 0}
+#sigPad{width:100%;height:180px;background:var(--cream);border:1.5px solid var(--ink);border-radius:16px;touch-action:none;display:block}
+.sigclear{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);background:none;border:none;margin-top:8px;text-decoration:underline}
+.polgrid{display:grid;gap:12px;margin:16px 0}
+.polcard{display:flex;gap:12px;align-items:center;padding:14px}
+.polcard .pi{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--cream);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px}
+.polcard .pt{font-family:var(--serif);font-size:15px;font-weight:500}
+.polcard .ps{font-size:12.5px;color:var(--inksoft);line-height:1.4;margin-top:2px}
+.warn{background:var(--cream2);border-left:3px solid var(--amber);border-radius:0 12px 12px 0;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--inksoft);margin:14px 0;display:none}
+.warn.show{display:block}
+.warn b{color:var(--ink)}
+.gstnote{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-top:14px;text-align:center}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:70;background:var(--ink);color:var(--cream);border-top:1.5px solid var(--gold)}
+.sticky .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.sticky .thumb{width:30px;height:42px;border-radius:8px 8px 4px 4px;border:1.5px solid var(--gold);flex:0 0 auto;background:var(--cream2)}
+.sticky .txt{flex:1;min-width:0}
+.sticky .l1{font-family:var(--serif);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticky .l2{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.sticky .go{flex:0 0 auto;background:var(--gold);color:var(--ink);border:none;border-radius:100px;font-weight:600;font-size:14px;padding:12px 18px}
+.sticky .go[disabled]{opacity:.4}
+.staffbtn{position:fixed;top:14px;right:14px;z-index:60;width:30px;height:30px;border-radius:50%;border:1px solid var(--goldline);background:var(--cream);color:var(--gold2);font-size:13px;display:flex;align-items:center;justify-content:center}
+.sheetbg{position:fixed;inset:0;background:rgba(43,35,26,.5);z-index:80;display:none}
+.sheetbg.show{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--cream);border-top:2px solid var(--gold);border-radius:24px 24px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .35s var(--spring);max-height:90vh;overflow:auto}
+.sheet.show{transform:none}
+.sheet .grab{width:44px;height:4px;border-radius:100px;background:var(--goldline);margin:0 auto 16px}
+.sheet h3{font-family:var(--serif);font-weight:500;font-size:22px;margin-bottom:4px}
+.sheet .ssub{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:18px}
+.staffrow{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.staffrow .sn{flex:1}
+.staffrow .x{width:30px;height:30px;border-radius:50%;border:1px solid var(--goldline);background:var(--cream);color:var(--red);font-size:16px}
+.wcat{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0 14px}
+.wcat button{border:1.5px solid var(--goldline);border-radius:100px;background:var(--cream);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:9px 8px}
+.wcat button.on{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:600}
+.addartist{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);background:none;border:1px dashed var(--gold);border-radius:100px;padding:10px 14px;margin-top:6px}
+.recbox{background:var(--cream2);border:1.5px solid var(--gold);border-radius:18px;padding:18px;margin-top:20px;display:none}
+.recbox.show{display:block;animation:pop .4s var(--spring)}
+.recbox h3{font-family:var(--serif);font-size:22px;margin-bottom:4px}
+.recbox .rid{font-family:var(--mono);font-size:11px;color:var(--gold2);letter-spacing:.08em;margin-bottom:14px}
+.recbox .rrow{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px dashed var(--hairline);font-size:14px}
+.recbox .rrow:last-child{border-bottom:none}
+.recbox .rrow .k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--inksoft)}
+.recbox .rrow .v{text-align:right;font-weight:500}
+.recbox .rtot{display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:1.5px solid var(--ink)}
+.recbox .rtot .v{font-family:var(--serif);font-size:24px;color:var(--gold2)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="mark" href="#"><span class="h">H</span><span class="t"><b>Haya Aesthetics &amp; Academy</b><span>Colour creates confidence</span></span></a>
+  <span class="loc"><b>T Nagar · ECR</b>Chennai</span>
+</div></header>
+<button class="staffbtn" id="staffBtn" title="Staff">★</button>
+
+<div class="wrap"><div class="rail" id="rail"></div></div>
+<div class="rule"></div>
+
+<div id="panels"></div>
+
+<div class="sticky" id="sticky"><div class="in">
+  <div class="thumb" id="sThumb"></div>
+  <div class="txt"><div class="l1" id="sL1">Haya Chair</div><div class="l2" id="sL2">Tap to begin</div></div>
+  <button class="go" id="sGo" disabled>Start</button>
+</div></div>
+
+<div class="sheetbg" id="sheetbg"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <div id="sheetBody"></div>
+</div>
+<!--BODY-->
+<script>
+/* ================= DATA (the four posters, encoded) ================= */
+const GST = 0.05;
+
+const LENGTHS = [
+  {id:"natural", nm:"Natural", mm:"0 mm"},
+  {id:"xs", nm:"XS", mm:"1–3 mm"},
+  {id:"s", nm:"Short", mm:"4–7 mm"},
+  {id:"m", nm:"Medium", mm:"8–12 mm"},
+  {id:"l", nm:"Long", mm:"13–17 mm"},
+  {id:"xl", nm:"XL", mm:"18–22 mm"},
+  {id:"xxl", nm:"XXL", mm:"23+ mm"},
+];
+// short/medium/long bucket index for design dots
+function lenBucket(id){ return ({natural:0,xs:0,s:0,m:1,l:2,xl:2,xxl:2})[id] ?? 1; }
+
+// shape x length compatibility: g/a/r per length column (Natural..XXL)
+const SHAPES = [
+  {id:"round",    nm:"Round",            comp:["g","g","g","g","a","r","r"]},
+  {id:"oval",     nm:"Oval",             comp:["g","g","g","g","g","a","r"]},
+  {id:"squoval",  nm:"Squoval",          comp:["g","g","g","g","g","a","r"]},
+  {id:"square",   nm:"Square",           comp:["g","g","g","a","a","r","r"]},
+  {id:"almond",   nm:"Almond",           comp:["a","a","g","g","g","g","a"]},
+  {id:"coffin",   nm:"Coffin / Ballerina",comp:["r","r","a","g","g","a","r"]},
+  {id:"stiletto", nm:"Stiletto",         comp:["r","r","r","a","g","g","a"]},
+  {id:"lipstick", nm:"Lipstick",         comp:["a","a","g","g","g","a","r"]},
+  {id:"natural",  nm:"Natural Shape",    comp:["g","g","g","g","g","a","r"]},
+];
+const TOE_SHAPES = [
+  {id:"tsquare",  nm:"Square",  comp:["g","g","g","g","g","a","r"]},
+  {id:"trounded", nm:"Rounded", comp:["g","g","g","g","g","a","r"]},
+  {id:"tsquoval", nm:"Squoval", comp:["g","g","g","g","g","a","r"]},
+];
+
+// design x length (short/medium/long)
+const DESIGNS = [
+  {id:"plain",   nm:"Plain / Solid",   comp:["g","g","g"]},
+  {id:"french",  nm:"French Tip",      comp:["g","g","g"]},
+  {id:"jelly",   nm:"Jelly",           comp:["a","g","g"]},
+  {id:"glitter", nm:"Glitter",         comp:["g","g","g"]},
+  {id:"cateye",  nm:"Cat Eye",          comp:["g","g","g"]},
+  {id:"ombre",   nm:"Ombré",           comp:["a","g","g"]},
+  {id:"chrome",  nm:"Chrome",          comp:["g","g","g"]},
+  {id:"marble",  nm:"Marble",          comp:["a","g","g"]},
+  {id:"minimal", nm:"Minimal Art",     comp:["g","g","a"]},
+  {id:"3d",      nm:"3D Embellished",   comp:["r","a","g"]},
+  {id:"4d",      nm:"4D Sculpted",     comp:["r","a","g"]},
+  {id:"charms",  nm:"Charms / Pearls", comp:["r","a","g"]},
+  {id:"ref",     nm:"Reference Photo", comp:["g","g","g"]},
+  {id:"toeart",  nm:"Toe Design",      comp:["g","g","g"]},
+  {id:"none",    nm:"None",            comp:["g","g","g"]},
+];
+
+const SERVICES = [
+  {id:"gel",      nm:"Gel Polish",        price:1000, area:"hands"},
+  {id:"glitterg", nm:"Glitter Gel Polish",price:1500, area:"hands"},
+  {id:"jellyg",   nm:"Jelly Gel Polish",  price:1000, area:"hands"},
+  {id:"cateyeg",  nm:"Cat Eye Gel Polish",price:2000, area:"hands"},
+  {id:"overlay",  nm:"Gel Overlay – Hands",price:1000, area:"hands"},
+  {id:"softgel-h",nm:"Soft Gel",          price:1500, area:"hands", group:"ext"},
+  {id:"glue-h",   nm:"Glue Extension",    price:1500, area:"hands", group:"ext"},
+  {id:"builder-h",nm:"Builder Gel",       price:2000, area:"hands", group:"ext"},
+  {id:"gumgel-h", nm:"Gum Gel",           price:2000, area:"hands", group:"ext"},
+  {id:"polygel-h",nm:"Poly Gel",          price:2000, area:"hands", group:"ext"},
+  {id:"hardgel-h",nm:"Hard Gel",          price:2500, area:"hands", group:"ext"},
+  {id:"softgel-f",nm:"Soft Gel",          price:1500, area:"feet", group:"ext"},
+  {id:"gumgel-f", nm:"Gum Gel",           price:2000, area:"feet", group:"ext"},
+  {id:"repair",   nm:"Nail Extension Repair",price:0, area:"both", group:"repair"},
+];
+
+const REMOVALS = [
+  {id:"l1",  nm:"Level 1", sub:"Simple — thin gel", price:500},
+  {id:"l2",  nm:"Level 2", sub:"Standard — soft gel / builder", price:1000},
+  {id:"l3",  nm:"Level 3", sub:"Complex — hard gel / acrylic", price:1500},
+  {id:"unsure", nm:"Not Sure", sub:"Artist will check first", price:0},
+  {id:"none",  nm:"No Removal", sub:"Skip", price:0},
+];
+
+const ADDONS = [
+  {id:"french", nm:"French Tip", tier:"classic", price:150, all:1500},
+  {id:"glitterfin", nm:"Glitter Finish", tier:"classic", price:150, all:1500},
+  {id:"geloverlay", nm:"Gel Overlay", tier:"classic", price:150, all:1500},
+  {id:"cateyeadd", nm:"Cat Eye", tier:"premium", price:200, all:2000},
+  {id:"ombreadd", nm:"Ombré", tier:"premium", price:200, all:2000},
+  {id:"art3d", nm:"3D / 4D Nail Art", tier:"premium", price:200, all:2000},
+];
+
+// colour families: each chip = {code, c (css background)}
+function fam(id,nm,tag,prefix,cs){
+  return {id,nm,tag, chips: cs.map((c,i)=>({code: prefix + String(i+1).padStart(2,"0"), c}))};
+}
+const FAMILIES = [
+  fam("nude","Nude Essentials","Timeless · everyday","N",["#F2E2CE","#EAD2B8","#D9B99A","#C39E78","#A87E54","#8A5E38","#6E4626"]),
+  fam("pink","Pinks & Corals","A shade for every mood","P",["#FCE4EC","#F8C6D6","#F2A0B8","#F07C8E","#E0526E","#D63A5C","#C42E6B"]),
+  fam("red","Reds","Bold · iconic","R",["#F4A0A0","#E25C5C","#CB2E2E","#A82020","#841A1A","#5E1010","#3A0808"]),
+  fam("orange","Oranges & Yellows","Brighten your day","O",["#F6D38A","#F2B85C","#F09A3A","#F07A1E","#E8C12E","#E0D44A","#C9A11E"]),
+  fam("green","Greens","Fresh · distinctive","G",["#CDE6A0","#A6C970","#7FAE4A","#5C8A3A","#3E6B2E","#2E5A4A","#1E4A3A"]),
+  fam("blue","Blues","Calm · classy","B",["#CFE6F2","#A6CFE0","#7FB2CC","#5C92B0","#3A6E94","#284E78","#16365E"]),
+  fam("purple","Purples","Rich · creative","PU",["#E6D6F2","#C8AEE0","#A88ECB","#8A6EB6","#6E509A","#56387E","#3E2460"]),
+  fam("brown","Browns & Taupes","Earthy · modern","BR",["#E6D8C4","#D4BE9E","#BFA07E","#A88560","#8E6A46","#745234","#5A3E22"]),
+  fam("glitter","Glitter & Sparkle","Shine brighter","GL",["#E8C97A","#D4A44A","#C98A6E","#B07050","#9A8A4A","#D8B85A","#C9A030"]),
+  fam("shimmer","Shimmer & Pearl","Soft glow · luminous","SP",["#F2EAE0","#E8D8C8","#DCC8B8","#CFB8A6","#C2A894","#B09A82","#9A8670"]),
+  fam("metallic","Metallic","Bold reflections","M",["#D9B070","#C99A4A","#B6B6BE","#9A9AA0","#7E7E86","#5A6E8E","#3E5A7E"]),
+  fam("cateye","Cat Eye","Magnetic beauty","CE",["#3A2E5A","#2E4A4A","#5A2E4A","#4A3E2E","#2E3E5A","#5A4A2E","#3E2E4A"]),
+  fam("jelly","Jelly / Translucent","Sheer · playful","J",["#F2C6D6","#E6A6C8","#D88AB0","#C6A0D8","#A6C8E0","#C8E0A6","#E0C6A6"]),
+  fam("marble","Marble / Effects","Artistic · one of a kind","MB",["#E8E0D8","#D8C8BE","#C8B8A6","#B8A894","#A89880","#987C6A","#886852"]),
+  fam("neon","Neons","Vibrant · unmissable","NE",["#FFE04A","#FF8E1E","#FF3E5A","#C9FF2E","#2EFF8E","#2EC9FF","#FF2EC9"]),
+  fam("special","Specials","A little extra","S",["#1A1A1A","#FAFAFA","#D4A44A","#C9A030","#8A6E4A","#5A3E2A","#3A2A1A"]),
+];
+const COLOUR_FROM = [
+  {id:"chart", nm:"Haya Colour Chart"},
+  {id:"ref", nm:"Reference Picture"},
+  {id:"artist", nm:"Artist Recommendation"},
+  {id:"multi", nm:"Multi-Colour"},
+  {id:"clear", nm:"Clear / No Colour"},
+];
+
+/* ================= STATE ================= */
+const S = {
+  step:0, name:"", mobile:"", firstVisit:null,
+  area:null, services:[], removal:null,
+  sameDiff:null,
+  shape:{}, length:{}, colour:{}, design:{}, addons:[],
+  checks:[], photos:{before:"skipped",after:"skipped"}, marketing:null,
+  signed:false,
+  staff:{artists:[{name:"",area:"",cats:[]}]},
+};
+const $ = id => document.getElementById(id);
+const steps = ["who","area","service","removal","samediff","shape","length","colour","design","during","final","staff"];
+const stepLabels = ["You","Area","Service","Removal","Same/Diff","Shape","Length","Colour","Design","In Service","Approve","Staff"];
+
+/* ================= RENDER HELPERS ================= */
+function dotCls(v){ return v==="g"?"dot-g":v==="a"?"dot-a":"dot-r"; }
+function el(html){ const t=document.createElement("template"); t.innerHTML=html.trim(); return t.content.firstChild; }
+function nailEl(c){ return `<div class="nail" style="--c:${c}"></div>`; }
+function shapeEl(id){ return `<div class="shp ${id}"></div>`; }
+
+function rail(){
+  $("rail").innerHTML = steps.map((s,i)=>
+    `<div class="step" data-i="${i}"><div class="n">${i+1}</div><div class="l">${stepLabels[i]}</div></div>`).join("");
+}
+function setRail(){
+  document.querySelectorAll("#rail .step").forEach((d,i)=>{
+    d.classList.toggle("on", i===S.step);
+    d.classList.toggle("done", i<S.step);
+  });
+}
+function go(i){ S.step = Math.max(0, Math.min(steps.length-1, i)); render(); }
+function next(){ go(S.step+1); }
+function back(){ go(S.step-1); }
+
+function navRow(nextLabel, canNext){
+  return `<div class="navrow"><button class="btn quiet" id="backBtn">Back</button>
+  <button class="btn gold" id="nextBtn" ${canNext?"":"disabled"}>${nextLabel}</button></div>`;
+}
+
+/* ================= TOTAL ================= */
+function total(){
+  let t = 0;
+  S.services.forEach(id=>{ const s=SERVICES.find(x=>x.id===id); if(s) t+=s.price; });
+  if(S.removal){ const r=REMOVALS.find(x=>x.id===S.removal); if(r) t+=r.price; }
+  S.addons.forEach(a=>{ t += a.all? a.all : a.price*a.qty; });
+  return t;
+}
+function gstTotal(){ return Math.round(total()*(1+GST)); }
+function inr(n){ return "₹" + n.toLocaleString("en-IN"); }
+
+function stickyUpdate(){
+  const t = total();
+  $("sL1").textContent = S.name || "Haya Chair";
+  let l2 = "Tap to begin";
+  if(S.step>0){
+    const parts=[];
+    if(S.area) parts.push(S.area==="both"?"Hands & Feet":S.area==="hands"?"Hands":"Feet");
+    if(S.services.length) parts.push(S.services.length+" service"+(S.services.length>1?"s":""));
+    if(S.colour.code) parts.push(S.colour.code);
+    l2 = parts.join(" · ") || "Select your set";
+  }
+  $("sL2").textContent = l2;
+  $("sThumb").style.background = S.colour.c ? S.colour.c : "var(--cream2)";
+  const go = $("sGo");
+  if(S.step===0){ go.textContent="Start"; go.disabled=false; go.onclick=()=>next(); }
+  else if(S.step<steps.length-1){ go.textContent = t? inr(gstTotal())+" · Next" : "Next"; go.disabled=false; go.onclick=()=>next(); }
+  else { go.textContent="Done"; go.disabled=!S.signed; go.onclick=()=>complete(); }
+}
+
+/* ================= PANELS ================= */
+function render(){
+  setRail();
+  const panels = $("panels");
+  panels.innerHTML = "";
+  const p = document.createElement("section");
+  p.className = "panel on";
+  p.innerHTML = panelHTML();
+  panels.appendChild(p);
+  panelMount();
+  stickyUpdate();
+  window.scrollTo({top:0});
+}
+function panelHTML(){
+  const s = steps[S.step];
+  if(s==="who") return whoPanel();
+  if(s==="area") return areaPanel();
+  if(s==="service") return servicePanel();
+  if(s==="removal") return removalPanel();
+  if(s==="samediff") return samediffPanel();
+  if(s==="shape") return shapePanel();
+  if(s==="length") return lengthPanel();
+  if(s==="colour") return colourPanel();
+  if(s==="design") return designPanel();
+  if(s==="during") return duringPanel();
+  if(s==="final") return finalPanel();
+  if(s==="staff") return staffPanel();
+  return "";
+}
+
+function whoPanel(){
+  const fv = S.firstVisit;
+  return `<p class="eyebrow">Step 1 · You</p>
+  <h2>Who's in the chair?</h2>
+  <p class="sub">Just your name and number. We'll attach the rest to your nails.</p>
+  <label class="fl">Your name</label>
+  <input class="field" id="fName" placeholder="As it should read on the record" value="${S.name}">
+  <label class="fl">WhatsApp number</label>
+  <input class="field" id="fMobile" inputmode="numeric" placeholder="10-digit number" value="${S.mobile}">
+  <label class="fl">First nail appointment with Haya?</label>
+  <div class="choices two">
+    <div class="choice ${fv==="yes"?"sel":""}" data-fv="yes"><div class="ck">✓</div><div class="pic"><div class="shp almond"></div></div><div class="nm">Yes, first time</div></div>
+    <div class="choice ${fv==="no"?"sel":""}" data-fv="no"><div class="ck">✓</div><div class="pic"><div class="shp oval"></div></div><div class="nm">No, I've been</div></div>
+  </div>
+  ${navRow("Next", S.name && S.mobile && fv)}`;
+}
+
+function areaPanel(){
+  const a = S.area;
+  return `<p class="eyebrow">Step 2 · Area</p>
+  <h2>Hands, feet, or both?</h2>
+  <p class="sub">We'll only show what applies to the area you pick.</p>
+  <div class="choices three">
+    <div class="choice ${a==="hands"?"sel":""}" data-area="hands"><div class="ck">✓</div><div class="pic">${twoHands()}</div><div class="nm">Hands</div></div>
+    <div class="choice ${a==="feet"?"sel":""}" data-area="feet"><div class="ck">✓</div><div class="pic">${twoToes()}</div><div class="nm">Feet</div></div>
+    <div class="choice ${a==="both"?"sel":""}" data-area="both"><div class="ck">✓</div><div class="pic">${twoHands()}${twoToes()}</div><div class="nm">Both</div></div>
+  </div>
+  ${navRow("Next", !!a)}`;
+}
+function twoHands(){ return `<span style="display:flex;gap:6px">${shapeEl("almond")}${shapeEl("almond")}</span>`; }
+function twoToes(){ return `<span style="display:flex;gap:6px"><div class="toe"></div><div class="toe"></div></span>`; }
+
+function servicePanel(){
+  if(!S.area) return `<p class="sub">Pick an area first.</p>${navRow("Next", false)}`;
+  const showHands = S.area==="hands"||S.area==="both";
+  const showFeet = S.area==="feet"||S.area==="both";
+  let html = `<p class="eyebrow">Step 3 · Service</p><h2>What are we doing today?</h2>
+  <p class="sub">Tap all that apply. Price is on the tile. Full-set rates; one hand or foot is 50%.</p>`;
+  const render = (list, title) => {
+    html += `<div class="famhead"><div class="ft">${title}</div></div><div class="desgrid">`;
+    list.forEach(s=>{
+      const sel = S.services.includes(s.id)?"sel":"";
+      const pr = s.price? inr(s.price) : "Quote";
+      html += `<div class="descard ${sel}" data-svc="${s.id}"><div class="ckdot">✓</div><div class="eff">${svcPic(s)}</div><div class="nm">${s.nm}</div><div class="pr" style="font-family:var(--mono);font-size:10px;color:var(--gold2);margin-top:4px">${pr}</div></div>`;
+    });
+    html += `</div>`;
+  };
+  const gel = SERVICES.filter(s=>s.area!=="feet" && !s.group);
+  const extH = SERVICES.filter(s=>s.area==="hands" && s.group==="ext");
+  const extF = SERVICES.filter(s=>s.area==="feet" && s.group==="ext");
+  const repair = SERVICES.filter(s=>s.group==="repair");
+  if(showHands) render(gel, "Gel Services — Hands");
+  if(showHands) render(extH, "Nail Extensions — Hands");
+  if(showFeet) render(extF, "Nail Extensions — Feet");
+  render(repair, "Repair");
+  html += `<p class="gstnote">All rates + 5% GST · 4+ nails on one hand/foot charged as one hand/foot</p>`;
+  html += navRow("Next", S.services.length>0);
+  return html;
+}
+function svcPic(s){
+  if(s.group==="ext") return `<div class="shp almond" style="background:var(--blush)"></div>`;
+  if(s.id==="repair") return `<div class="shp square" style="background:var(--blush)"></div>`;
+  return nailEl("#C98B86");
+}
+
+function removalPanel(){
+  const r = S.removal;
+  let html = `<p class="eyebrow">Step 4 · Removal</p><h2>Removal first?</h2>
+  <p class="sub">Match the product thickness. The artist confirms the level after checking.</p>
+  <div class="choices">`;
+  REMOVALS.forEach(x=>{
+    const sel = r===x.id?"sel":"";
+    html += `<div class="choice ${sel}" data-rem="${x.id}"><div class="ck">✓</div>
+      <div class="pic">${remPic(x.id)}</div>
+      <div class="nm">${x.nm}</div><div class="pr">${x.sub}${x.price?" · "+inr(x.price):""}</div></div>`;
+  });
+  html += `</div>`;
+  if(r==="unsure") html += `<div class="warn show"><b>Artist must confirm</b> the removal level before starting.</div>`;
+  html += navRow("Next", !!r);
+  return html;
+}
+function remPic(id){
+  if(id==="none") return `<div class="shp natural"></div>`;
+  if(id==="unsure") return `<div class="shp squoval" style="opacity:.5"></div>`;
+  const h = id==="l1"?28:id==="l2"?46:64;
+  return `<div class="shp almond" style="height:${h}px"></div>`;
+}
+
+function samediffPanel(){
+  const sd = S.sameDiff;
+  let html = `<p class="eyebrow">Step 5 · Same or Different</p><h2>Same set, or different?</h2>
+  <p class="sub">Same shape, length, colour &amp; design everywhere? Or mix it up by hand and foot?</p>
+  <div class="choices two">
+    <div class="choice ${sd==="same"?"sel":""}" data-sd="same"><div class="ck">✓</div><div class="pic">${twoHands()}</div><div class="nm">Same selection</div></div>
+    <div class="choice ${sd==="diff"?"sel":""}" data-sd="diff"><div class="ck">✓</div><div class="pic"><span style="display:flex;gap:6px;align-items:center">${shapeEl("almond")}<span style="font-size:22px;color:var(--gold2)">↻</span>${shapeEl("square")}</span></div><div class="nm">Different selection</div></div>
+  </div>`;
+  if(sd==="diff"){
+    html += `<div class="mapgrid" style="margin-top:18px">`;
+    const areas = [];
+    if(S.area==="hands"||S.area==="both") areas.push("Left Hand","Right Hand");
+    if(S.area==="feet"||S.area==="both") areas.push("Left Foot","Right Foot");
+    areas.forEach(lbl=>{
+      html += `<div class="mapcard"><div class="lbl">${lbl}</div><div class="selmini" data-map="${lbl}">Tap to note</div></div>`;
+    });
+    html += `</div>`;
+    html += `<p class="gstnote">Sections ahead act as reference lists — don't re-enter per side.</p>`;
+  }
+  html += navRow("Next", !!sd);
+  return html;
+}
+
+function shapePanel(){
+  const isToe = S.area==="feet";
+  const list = isToe ? TOE_SHAPES : SHAPES;
+  const sel = S.shape.id;
+  let html = `<p class="eyebrow">Step 6 · Shape</p><h2>Pick your shape</h2>
+  <p class="sub">The dots under each shape show which lengths work. Green = ideal, amber = caution, red = not recommended.</p>
+  <div class="shapegrid">`;
+  list.forEach(sh=>{
+    const s = sel===sh.id?"sel":"";
+    html += `<div class="shapecard ${s}" data-shape="${sh.id}"><div class="ckdot">✓</div>${shapeEl(isToe?sh.id:sh.id)}<div class="nm">${sh.nm}</div>
+      <div class="dots">${sh.comp.map(v=>`<i class="${dotCls(v)}"></i>`).join("")}</div></div>`;
+  });
+  html += `</div>`;
+  if(sel){
+    const sh = list.find(x=>x.id===sel);
+    const reds = sh.comp.filter(v=>v==="r").length;
+    if(reds>4) html += `<div class="warn show"><b>${sh.nm}</b> needs length — short nails won't hold this shape. Pick a longer length, or ask for an artist recommendation.</div>`;
+  }
+  html += navRow("Next", !!sel);
+  return html;
+}
+
+function lengthPanel(){
+  if(!S.shape.id) return `<p class="sub">Pick a shape first.</p>${navRow("Next", false)}`;
+  const isToe = S.area==="feet";
+  const list = isToe ? TOE_SHAPES : SHAPES;
+  const sh = list.find(x=>x.id===S.shape.id);
+  const sel = S.length.id;
+  let html = `<p class="eyebrow">Step 7 · Length</p><h2>How long?</h2>
+  <p class="sub">Lengths the <b>${sh.nm}</b> shape works with are lit green. Amber = possible with care.</p>
+  <div class="lenrow">`;
+  LENGTHS.forEach((ln,i)=>{
+    const v = sh.comp[i];
+    const s = sel===ln.id?"sel":"";
+    const dim = v==="r"?"dot-r":"";
+    html += `<div class="lencard ${s}" data-len="${ln.id}"><div class="bar"><div class="shp ${S.shape.id}" style="height:${20+i*5}px"></div></div>
+      <div class="nm">${ln.nm}</div><div class="mm">${ln.mm}</div><div class="dot ${dotCls(v)}"></div></div>`;
+  });
+  html += `</div>`;
+  if(sel){
+    const i = LENGTHS.findIndex(x=>x.id===sel);
+    if(sh.comp[i]==="r") html += `<div class="warn show"><b>${sh.nm}</b> at <b>${LENGTHS[i].nm}</b> isn't recommended. Choose an artist recommendation instead.</div>`;
+    else if(sh.comp[i]==="a") html += `<div class="warn show"><b>${sh.nm}</b> at <b>${LENGTHS[i].nm}</b> is possible with care. The artist may simplify.</div>`;
+  }
+  html += navRow("Next", !!sel);
+  return html;
+}
+
+function colourPanel(){
+  let fam = S.colour.fam || FAMILIES[0].id;
+  const f = FAMILIES.find(x=>x.id===fam);
+  let html = `<p class="eyebrow">Step 8 · Colour</p><h2>Pick your colour</h2>
+  <p class="sub">Tap a nail. We store the family and code — no colour-name typing.</p>
+  <div class="famtabs">`;
+  FAMILIES.forEach(x=>{ html += `<button class="${x.id===fam?"on":""}" data-fam="${x.id}">${x.nm}</button>`; });
+  html += `</div><div class="famhead"><div class="ft">${f.nm}</div><div class="fg">${f.tag}</div></div>
+  <div class="chipgrid">`;
+  f.chips.forEach(c=>{
+    const sel = S.colour.code===c.code?"sel":"";
+    html += `<div class="chip ${sel}" data-code="${c.code}" data-c="${c.c}"><div class="ckdot">✓</div>${nailEl(c.c)}<div class="code">${c.code}</div></div>`;
+  });
+  html += `</div>
+  <label class="fl" style="margin-top:22px">Selected from</label>
+  <div class="choices three">`;
+  COLOUR_FROM.forEach(cf=>{
+    const sel = S.colour.from===cf.id?"sel":"";
+    html += `<div class="choice ${sel}" data-from="${cf.id}" style="padding:14px 8px"><div class="ck">✓</div><div class="nm" style="font-size:13px">${cf.nm}</div></div>`;
+  });
+  html += `</div>
+  <p class="gstnote">Sheer, pale &amp; jelly colours may show the natural nail underneath. Screens vary.</p>`;
+  html += navRow("Next", !!S.colour.code);
+  return html;
+}
+
+function designPanel(){
+  const lenId = S.length.id;
+  const bucket = lenBucket(lenId);
+  let html = `<p class="eyebrow">Step 9 · Design</p><h2>Design &amp; effect</h2>
+  <p class="sub">Dots show fit at your length (short / medium / long). Locked tiles don't suit your length.</p>
+  <div class="desgrid">`;
+  DESIGNS.forEach(d=>{
+    const v = d.comp[bucket];
+    const locked = v==="r";
+    const sel = S.design.id===d.id?"sel":"";
+    html += `<div class="descard ${sel} ${locked?"locked":""}" data-des="${d.id}" ${locked?'data-locked="1"':""}>
+      <div class="ckdot">✓</div><div class="eff">${desPic(d.id)}</div><div class="nm">${d.nm}</div>
+      <div class="ldots">${d.comp.map(x=>`<i class="${dotCls(x)}"></i>`).join("")}</div></div>`;
+  });
+  html += `</div>`;
+  if(S.design.id && S.design.id!=="none" && S.design.id!=="ref"){
+    html += `<label class="fl" style="margin-top:22px">Add-ons</label>
+    <div class="addgrid">`;
+    ADDONS.forEach(a=>{
+      const sel = S.addons.find(x=>x.id===a.id)?"sel":"";
+      html += `<div class="addcard ${sel}" data-add="${a.id}"><div class="ckdot">✓</div><div class="nm">${a.nm}</div><div class="pr">${inr(a.price)}/finger · ${inr(a.all)}/10</div></div>`;
+    });
+    html += `</div>`;
+    const picked = S.addons.find(x=>x.id);
+    if(picked){
+      html += `<div class="qtystrip" id="qtyStrip">`;
+      for(let n=1;n<=10;n++){ html += `<button class="${picked.qty===n?"on":""}" data-qty="${n}">${n}</button>`; }
+      html += `</div>`;
+    }
+  }
+  html += navRow("Next", !!S.design.id);
+  return html;
+}
+function desPic(id){
+  const m = {
+    plain:nailEl("#C98B86"), french:`<div class="shp almond" style="background:linear-gradient(180deg,#F3DED9 70%,#fff 70%)"></div>`,
+    jelly:nailEl("#F2C6D6"), glitter:`<div class="shp almond" style="background:repeating-linear-gradient(45deg,#E8C97A 0 2px,#D4A44A 2px 4px)"></div>`,
+    cateye:nailEl("#3A2E5A"), ombre:`<div class="shp almond" style="background:linear-gradient(180deg,#F3DED9,#E0526E)"></div>`,
+    chrome:`<div class="shp almond" style="background:linear-gradient(120deg,#D9B070,#fff,#9A9AA0)"></div>`,
+    marble:`<div class="shp almond" style="background:linear-gradient(120deg,#E8E0D8,#B8A894,#E8E0D8)"></div>`,
+    minimal:`<div class="shp almond" style="background:#F3DED9"></div>`,
+    "3d":`<div class="shp almond" style="background:#F3DED9"></div>`, "4d":`<div class="shp almond" style="background:#F3DED9"></div>`,
+    charms:`<div class="shp almond" style="background:#F3DED9"></div>`, ref:`<div class="shp square" style="background:var(--cream)"></div>`,
+    toeart:`<div class="toe"></div>`, none:`<div class="shp natural"></div>`
+  };
+  return m[id]||nailEl("#C98B86");
+}
+
+function duringPanel(){
+  const checks = ["shape","length","colour","design","changes"];
+  const labels = ["Shape checked","Length checked","Colour checked","Design checked","Changes told to artist"];
+  let html = `<p class="eyebrow">Step 10 · In Service</p><h2>Check as we go</h2>
+  <p class="sub">The artist hands you the tablet. Tap each picture once you've checked that part on your own nails.</p>
+  <div class="checkgrid">`;
+  checks.forEach((id,i)=>{
+    const sel = S.checks.includes(id)?"sel":"";
+    html += `<div class="chkcard ${sel}" data-chk="${id}"><div class="ckdot">✓</div><div class="ic">${chkPic(id)}</div><div class="nm">${labels[i]}</div></div>`;
+  });
+  html += `</div>${navRow("Next", S.checks.length>=4)}`;
+  return html;
+}
+function chkPic(id){
+  if(id==="changes") return `<span style="font-size:26px;color:var(--gold2)">💬</span>`;
+  return shapeEl(id==="shape"?"almond":id==="length"?"coffin":id==="colour"?"oval":"almond");
+}
+
+function finalPanel(){
+  let html = `<p class="eyebrow">Step 11 · Approve &amp; Consent</p><h2>Final check &amp; sign</h2>
+  <p class="sub">Approve the finished set, set photo permissions, then sign. Three things to know first:</p>
+  <div class="polgrid">
+    <div class="polcard"><div class="pi">↺</div><div><div class="pt">Dislike = new service</div><div class="ps">A later change of preference is a new, chargeable service.</div></div></div>
+    <div class="polcard"><div class="pi">✕</div><div><div class="pt">Removal is separate</div><div class="ps">Professional removal is chargeable, even right after completion.</div></div></div>
+    <div class="polcard"><div class="pi">+</div><div><div class="pt">Fresh set is separate</div><div class="ps">Any new application after a change is also chargeable.</div></div></div>
+  </div>
+  <label class="fl">Photo record</label>
+  <div class="photogrid">
+    ${photoCard("before","Before photo")}
+    ${photoCard("after","After photo")}
+  </div>
+  <label class="fl">Marketing permission — may Haya use your nail photos?</label>
+  <div class="choices two">
+    <div class="choice ${S.marketing==="no"?"sel":""}" data-mkt="no"><div class="ck">✓</div><div class="nm">No — record only</div></div>
+    <div class="choice ${S.marketing==="yes"?"sel":""}" data-mkt="yes"><div class="ck">✓</div><div class="nm">Yes — marketing ok</div></div>
+  </div>
+  <label class="fl" style="margin-top:18px">Client signature</label>
+  <div class="sigwrap"><canvas id="sigPad"></canvas><button class="sigclear" id="sigClear">Clear</button></div>
+  ${navRow("Complete", S.marketing && S.signed)}`;
+  return html;
+}
+function photoCard(key,label){
+  const v = S.photos[key];
+  return `<div class="photocard"><div class="lbl">${label}</div>
+    <div class="ph">${v==="taken"?"✓":"📷"}</div>
+    <div class="opts">
+      <button class="${v==="taken"?"on":""}" data-photo="${key}" data-v="taken">Taken</button>
+      <button class="${v==="skipped"?"on":""}" data-photo="${key}" data-v="skipped">Skipped</button>
+    </div></div>`;
+}
+
+function staffPanel(){
+  let html = `<p class="eyebrow">Step 12 · Staff</p><h2>Internal record</h2>
+  <p class="sub">Staff only. Records artist, area and work category — never the client's full service again.</p>`;
+  S.staff.artists.forEach((a,i)=>{
+    html += `<div class="staffrow">
+      <input class="field sn" data-artist="${i}" placeholder="Artist ${i+1} name" value="${a.name}">
+      <button class="x" data-xartist="${i}" ${S.staff.artists.length<=1?"disabled":""}>×</button>
+    </div>
+    <div class="choices three" style="margin-bottom:8px">
+      ${["Hands","Feet","Both"].map(ar=>`<div class="choice ${a.area===ar?"sel":""}" data-astaff="${i}" data-area="${ar}" style="padding:10px 6px"><div class="ck">✓</div><div class="nm" style="font-size:13px">${ar}</div></div>`).join("")}
+    </div>
+    <div class="wcat">
+      ${["Removal & Prep","Main Nail Service","Colour & Finish","Design & Add-ons","Repair / Correction"].map(c=>`<button class="${a.cats.includes(c)?"on":""}" data-cat="${i}" data-c="${c}">${c}</button>`).join("")}
+    </div>`;
+  });
+  html += `<button class="addartist" id="addArtist">+ Add artist</button>`;
+  html += `<div class="recbox ${S.signed?"show":""}" id="recBox"></div>`;
+  html += `<div class="navrow"><button class="btn quiet" id="backBtn">Back</button><button class="btn gold" id="nextBtn" ${S.signed?"":"disabled"}>Mark complete</button></div>`;
+  return html;
+}
+
+/* ================= MOUNT / EVENTS ================= */
+function panelMount(){
+  const on = (sel, fn)=>{ const e=document.querySelector(sel); if(e) e.addEventListener("click",fn); };
+  on("#backBtn", back);
+  on("#nextBtn", ()=>{ if(S.step===steps.length-1) complete(); else next(); });
+
+  // who
+  const fn=$("fName"); if(fn) fn.addEventListener("input",e=>{S.name=e.target.value; stickyUpdate();});
+  const fm=$("fMobile"); if(fm) fm.addEventListener("input",e=>{S.mobile=e.target.value; stickyUpdate();});
+  document.querySelectorAll("[data-fv]").forEach(c=>c.addEventListener("click",()=>{
+    S.firstVisit=c.dataset.fv; render();
+  }));
+
+  // area
+  document.querySelectorAll("[data-area]").forEach(c=>c.addEventListener("click",()=>{
+    S.area=c.dataset.area; render();
+  }));
+
+  // service
+  document.querySelectorAll("[data-svc]").forEach(c=>c.addEventListener("click",()=>{
+    const id=c.dataset.svc;
+    S.services = S.services.includes(id) ? S.services.filter(x=>x!==id) : [...S.services,id];
+    render();
+  }));
+
+  // removal
+  document.querySelectorAll("[data-rem]").forEach(c=>c.addEventListener("click",()=>{
+    S.removal=c.dataset.rem; render();
+  }));
+
+  // same/diff
+  document.querySelectorAll("[data-sd]").forEach(c=>c.addEventListener("click",()=>{
+    S.sameDiff=c.dataset.sd; render();
+  }));
+  document.querySelectorAll("[data-map]").forEach(c=>c.addEventListener("click",()=>{
+    const cur=c.textContent; c.textContent = cur==="Tap to note"?"Noted ✓":"Tap to note";
+  }));
+
+  // shape
+  document.querySelectorAll("[data-shape]").forEach(c=>c.addEventListener("click",()=>{
+    S.shape={id:c.dataset.shape}; S.length={}; render();
+  }));
+
+  // length
+  document.querySelectorAll("[data-len]").forEach(c=>c.addEventListener("click",()=>{
+    const id=c.dataset.len; const i=LENGTHS.findIndex(x=>x.id===id);
+    const sh=(S.area==="feet"?TOE_SHAPES:SHAPES).find(x=>x.id===S.shape.id);
+    if(sh.comp[i]==="r"){ return; }
+    S.length={id}; render();
+  }));
+
+  // colour
+  document.querySelectorAll(".famtabs button").forEach(c=>c.addEventListener("click",()=>{
+    S.colour.fam=c.dataset.fam; render();
+  }));
+  document.querySelectorAll("[data-code]").forEach(c=>c.addEventListener("click",()=>{
+    S.colour={fam:S.colour.fam||FAMILIES[0].id, code:c.dataset.code, c:c.dataset.c, from:S.colour.from};
+    render();
+  }));
+  document.querySelectorAll("[data-from]").forEach(c=>c.addEventListener("click",()=>{
+    S.colour.from=c.dataset.from; render();
+  }));
+
+  // design
+  document.querySelectorAll("[data-des]").forEach(c=>c.addEventListener("click",()=>{
+    if(c.dataset.locked) return;
+    S.design={id:c.dataset.des}; render();
+  }));
+  document.querySelectorAll("[data-add]").forEach(c=>c.addEventListener("click",()=>{
+    const id=c.dataset.add;
+    const ex=S.addons.find(x=>x.id===id);
+    if(ex){ S.addons=S.addons.filter(x=>x.id!==id); }
+    else { const a=ADDONS.find(x=>x.id===id); S.addons.push({...a, qty:1}); }
+    render();
+  }));
+  document.querySelectorAll("[data-qty]").forEach(c=>c.addEventListener("click",()=>{
+    const n=+c.dataset.qty; const picked=S.addons.find(x=>x.id);
+    if(picked) picked.qty=n; render();
+  }));
+
+  // during
+  document.querySelectorAll("[data-chk]").forEach(c=>c.addEventListener("click",()=>{
+    const id=c.dataset.chk;
+    S.checks = S.checks.includes(id)?S.checks.filter(x=>x!==id):[...S.checks,id];
+    render();
+  }));
+
+  // final
+  document.querySelectorAll("[data-photo]").forEach(c=>c.addEventListener("click",()=>{
+    S.photos[c.dataset.photo]=c.dataset.v; render();
+  }));
+  document.querySelectorAll("[data-mkt]").forEach(c=>c.addEventListener("click",()=>{
+    S.marketing=c.dataset.mkt; render();
+  }));
+  const pad=$("sigPad");
+  if(pad) initSig(pad);
+
+  // staff
+  document.querySelectorAll("[data-artist]").forEach(c=>c.addEventListener("input",e=>{
+    S.staff.artists[+c.dataset.artist].name=e.target.value;
+  }));
+  document.querySelectorAll("[data-xartist]").forEach(c=>c.addEventListener("click",()=>{
+    S.staff.artists.splice(+c.dataset.xartist,1); if(!S.staff.artists.length) S.staff.artists.push({name:"",area:"",cats:[]}); render();
+  }));
+  document.querySelectorAll("[data-astaff]").forEach(c=>c.addEventListener("click",()=>{
+    S.staff.artists[+c.dataset.astaff].area=c.dataset.area; render();
+  }));
+  document.querySelectorAll("[data-cat]").forEach(c=>c.addEventListener("click",()=>{
+    const i=+c.dataset.cat, cat=c.dataset.c, a=S.staff.artists[i];
+    a.cats = a.cats.includes(cat)?a.cats.filter(x=>x!==cat):[...a.cats,cat];
+    render();
+  }));
+  const aa=$("addArtist"); if(aa) aa.addEventListener("click",()=>{
+    if(S.staff.artists.length<3){ S.staff.artists.push({name:"",area:"",cats:[]}); render(); }
+  });
+  if(S.signed) renderRecBox();
+}
+
+/* ================= SIGNATURE ================= */
+function initSig(canvas){
+  const ctx=canvas.getContext("2d");
+  const dpr=window.devicePixelRatio||1;
+  const r=canvas.getBoundingClientRect();
+  canvas.width=r.width*dpr; canvas.height=r.height*dpr; ctx.scale(dpr,dpr);
+  ctx.strokeStyle="#2B231A"; ctx.lineWidth=2.4; ctx.lineCap="round"; ctx.lineJoin="round";
+  let drawing=false, hasInk=false;
+  const pos=e=>{ const rr=canvas.getBoundingClientRect(); const x=(e.touches?e.touches[0].clientX:e.clientX)-rr.left; const y=(e.touches?e.touches[0].clientY:e.clientY)-rr.top; return {x,y}; };
+  const start=e=>{ e.preventDefault(); drawing=true; const p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); };
+  const move=e=>{ if(!drawing)return; e.preventDefault(); const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); hasInk=true; };
+  const end=()=>{ drawing=false; if(hasInk){ S.signed=true; $("nextBtn")&&($("nextBtn").disabled=false); stickyUpdate(); if($("recBox")) renderRecBox(); } };
+  canvas.addEventListener("pointerdown",start); canvas.addEventListener("pointermove",move); canvas.addEventListener("pointerup",end); canvas.addEventListener("pointerleave",end);
+  const clr=$("sigClear"); if(clr) clr.addEventListener("click",()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height); S.signed=false; hasInk=false;
+    const nb=$("nextBtn"); if(nb) nb.disabled=true; stickyUpdate();
+    const rb=$("recBox"); if(rb){ rb.classList.remove("show"); }
+  });
+}
+
+/* ================= RECORD / COMPLETE ================= */
+function renderRecBox(){
+  const rb=$("recBox"); if(!rb) return;
+  rb.classList.add("show");
+  const svc=S.services.map(id=>SERVICES.find(x=>x.id===id).nm).join(", ")||"—";
+  const rem=REMOVALS.find(x=>x.id===S.removal);
+  const fam=FAMILIES.find(x=>x.id===S.colour.fam);
+  const des=DESIGNS.find(x=>x.id===S.design.id);
+  rb.innerHTML=`<h3>Service Record</h3><div class="rid">HAYA-${Date.now().toString(36).slice(-6).toUpperCase()}</div>
+    <div class="rrow"><span class="k">Client</span><span class="v">${S.name||"—"}</span></div>
+    <div class="rrow"><span class="k">Service</span><span class="v">${svc}</span></div>
+    <div class="rrow"><span class="k">Removal</span><span class="v">${rem?rem.nm:"—"}</span></div>
+    <div class="rrow"><span class="k">Shape</span><span class="v">${S.shape.id||"—"}</span></div>
+    <div class="rrow"><span class="k">Length</span><span class="v">${S.length.id||"—"}</span></div>
+    <div class="rrow"><span class="k">Colour</span><span class="v">${S.colour.code||"—"} ${fam?"("+fam.nm+")":""}</span></div>
+    <div class="rrow"><span class="k">Design</span><span class="v">${des?des.nm:"—"}</span></div>
+    <div class="rrow"><span class="k">Add-ons</span><span class="v">${S.addons.map(a=>a.nm+(a.qty>1?" ×"+a.qty:"")).join(", ")||"none"}</span></div>
+    <div class="rrow"><span class="k">Photos</span><span class="v">Before ${S.photos.before} · After ${S.photos.after}</span></div>
+    <div class="rrow"><span class="k">Marketing</span><span class="v">${S.marketing||"—"}</span></div>
+    <div class="rtot"><span class="k">Total + 5% GST</span><span class="v">${inr(gstTotal())}</span></div>`;
+}
+function complete(){
+  alert("Record complete and signed. (Worker persistence is a later step — this is the in-chair prototype.)");
+}
+
+/* ================= STAFF SHEET ================= */
+function openStaff(){
+  $("sheetbg").classList.add("show");
+  $("sheet").classList.add("show");
+  $("sheetBody").innerHTML=`<div class="ssub">Staff PIN</div>
+    <input class="field" id="pinIn" inputmode="numeric" placeholder="Enter PIN" type="password">
+    <button class="btn gold block" id="pinGo">Open staff record</button>
+    <p class="gstnote">Demo PIN: 1234</p>`;
+  $("pinGo").addEventListener("click",()=>{
+    if($("pinIn").value==="1234"){ closeStaff(); S.step=steps.indexOf("staff"); render(); }
+    else { $("pinIn").style.boxShadow="3px 3px 0 var(--red)"; }
+  });
+}
+function closeStaff(){ $("sheetbg").classList.remove("show"); $("sheet").classList.remove("show"); }
+
+/* ================= INIT ================= */
+rail();
+render();
+$("staffBtn").addEventListener("click", openStaff);
+$("sheetbg").addEventListener("click", closeStaff);
+</script>
+</body>
+</html>
