@@ -1,0 +1,20 @@
+{
+  "name": "Based Aesthetics — Try-On",
+  "install": "npm install",
+  "terminals": [
+    {
+      "name": "worker",
+      "command": "npm run dev:worker",
+      "description": "Cloudflare Worker API (wrangler dev) on http://localhost:8787 — serves /api/tryon/* with local KV. Render needs GEMINI_API_KEY and booking needs GHL_* (both degrade gracefully when unset)."
+    },
+    {
+      "name": "page",
+      "command": "npm run dev:page",
+      "description": "Static page server on http://localhost:3000 — open /tryon-preview for the standalone mocked demo, or /tryon for the real page."
+    }
+  ],
+  "ports": [
+    { "name": "worker-api", "port": 8787 },
+    { "name": "static-page", "port": 3000 }
+  ]
+}
