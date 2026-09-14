@@ -76,6 +76,7 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
 .choice:hover{transform:translateY(-3px) rotate(-.4deg)}
 .choice.sel{border-color:var(--gold);box-shadow:0 0 0 3px var(--cream),0 0 0 5px var(--gold);transform:translateY(-3px)}
 .choice .pic{height:84px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.choice .pic .photoasset{height:100%;object-fit:cover}
 .choice .nm{font-family:var(--serif);font-size:17px;font-weight:500;line-height:1.1}
 .choice .pr{font-family:var(--mono);font-size:10.5px;color:var(--gold2);margin-top:4px;letter-spacing:.04em}
 .choice .ck{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center;font-size:13px;font-weight:700}
@@ -86,6 +87,17 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
 .tile.dim{opacity:.45}
 .tile .ckdot{position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:var(--gold);color:var(--ink);display:none;align-items:center;justify-content:center;font-size:11px;font-weight:700}
 .tile.sel .ckdot{display:flex}
+.photoasset{display:block;width:100%;object-fit:cover;border-radius:10px;background:#fff}
+.tile .photoasset{height:118px;margin-bottom:7px}
+.tile.shape-tile{padding:5px 5px 9px}
+.tile.shape-tile .photoasset{height:150px;object-position:center}
+.tile.design-tile{padding:5px 5px 9px}
+.tile.design-tile .photoasset{height:132px;object-position:center}
+.tile.colour-tile{padding:4px 4px 8px}
+.tile.colour-tile .photoasset{height:92px;object-fit:contain;background:#f7f1e8}
+.tile.length-tile{padding:5px 5px 9px}
+.tile.length-tile .photoasset{height:105px;object-fit:cover;object-position:center}
+.service-photo{height:92px!important;object-fit:cover}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px 11px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px 11px}
 @media(min-width:560px){.grid3{grid-template-columns:repeat(4,1fr)}}
@@ -116,6 +128,11 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
 .preview .pvlabel .code{font-weight:600;color:var(--ink)}
 .preview .pvstage{display:flex;align-items:flex-end;justify-content:center;gap:18px;min-height:150px;padding:8px 0}
 .preview .pvstage .pvnail{position:relative;transition:all .4s var(--spring)}
+.pvnail .preview-photo{display:block;width:145px;height:155px;object-fit:cover;border:1.5px solid var(--goldline);border-radius:14px;box-shadow:3px 3px 0 rgba(194,154,61,.28);background:#fff}
+.preview.big .pvnail .preview-photo{width:220px;height:230px}
+.preview-collage{display:flex;gap:9px;align-items:flex-end;justify-content:center}
+.preview-collage .preview-photo.secondary{width:90px;height:110px}
+.preview.big .preview-collage .preview-photo.secondary{width:120px;height:145px}
 .preview .pvside{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);text-align:center;margin-top:6px}
 .preview .pvspec{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;justify-content:center}
 .preview .pvspec .chip{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;background:var(--cream);border:1px solid var(--goldline);border-radius:100px;padding:5px 10px;color:var(--inksoft)}
@@ -123,7 +140,6 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
 .preview .pvempty{font-family:var(--serif);font-size:16px;color:var(--inksoft);font-style:italic;text-align:center;padding:30px 0}
 .preview.big{padding:24px 18px}
 .preview.big .pvstage{min-height:200px}
-/* the morphing nail (SVG) */
 .pvnail svg{display:block;overflow:visible}
 /* ===== feasibility explainer ===== */
 .explainer{position:fixed;left:0;right:0;bottom:0;z-index:85;background:var(--cream);border-top:2px solid var(--gold);border-radius:24px 24px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .35s var(--spring);max-height:80vh;overflow:auto}
@@ -261,14 +277,14 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
     <input class="field" id="fMobile" inputmode="numeric" placeholder="10-digit number">
     <label class="fl">First nail appointment with Haya?</label>
     <div class="choices two" id="fvChoice">
-      <div class="choice" data-fv="yes"><div class="ck">✓</div><div class="pic"><svg class="mini" viewBox="0 0 40 70"><use href="#shp-almond"/></svg></div><div class="nm">Yes, first time</div></div>
-      <div class="choice" data-fv="no"><div class="ck">✓</div><div class="pic"><svg class="mini" viewBox="0 0 40 70"><use href="#shp-oval"/></svg></div><div class="nm">No, I've been</div></div>
+      <div class="choice" data-fv="yes"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/plain.webp" alt="Natural pink nails"></div><div class="nm">Yes, first time</div></div>
+      <div class="choice" data-fv="no"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/reference.webp" alt="Finished Haya nail set"></div><div class="nm">No, I've been</div></div>
     </div>
     <label class="fl">What are we working on?</label>
     <div class="choices three" id="areaChoice">
-      <div class="choice" data-area="hands"><div class="ck">✓</div><div class="pic"><span style="display:flex;gap:6px"><svg class="mini" viewBox="0 0 40 70"><use href="#shp-almond"/></svg><svg class="mini" viewBox="0 0 40 70"><use href="#shp-almond"/></svg></span></div><div class="nm">Hands</div></div>
-      <div class="choice" data-area="feet"><div class="ck">✓</div><div class="pic"><span style="display:flex;gap:6px"><svg class="mini" viewBox="0 0 34 46"><use href="#toe"/></svg><svg class="mini" viewBox="0 0 34 46"><use href="#toe"/></svg></span></div><div class="nm">Feet</div></div>
-      <div class="choice" data-area="both"><div class="ck">✓</div><div class="pic"><span style="display:flex;gap:6px"><svg class="mini" viewBox="0 0 40 70"><use href="#shp-almond"/></svg><svg class="mini" viewBox="0 0 34 46"><use href="#toe"/></svg></span></div><div class="nm">Both</div></div>
+      <div class="choice" data-area="hands"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/reference.webp" alt="Hand nail service"></div><div class="nm">Hands</div></div>
+      <div class="choice" data-area="feet"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/toeart.webp" alt="Toe nail service"></div><div class="nm">Feet</div></div>
+      <div class="choice" data-area="both"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/rules/rule-4.webp" alt="Hands and feet service"></div><div class="nm">Both</div></div>
     </div>
     <div class="navrow"><button class="btn quiet" id="back1">Back</button><button class="btn gold" id="next1" disabled>Next</button></div>
   </div></section>
@@ -338,9 +354,9 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
     <div id="p6price"></div>
     <label class="fl">Good to know</label>
     <div class="polgrid">
-      <div class="polcard"><div class="pi">↺</div><div><div class="pt">Dislike = new service</div><div class="ps">A later change of preference is a new, chargeable service.</div></div></div>
-      <div class="polcard"><div class="pi">✕</div><div><div class="pt">Removal is separate</div><div class="ps">Professional removal is chargeable, even right after completion.</div></div></div>
-      <div class="polcard"><div class="pi">+</div><div><div class="pt">Fresh set is separate</div><div class="ps">Any new application after a change is also chargeable.</div></div></div>
+      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/rules/rule-1.webp" alt="Reference design is not an exact-copy promise"><div><div class="pt">Dislike = new service</div><div class="ps">A later change of preference is a new, chargeable service.</div></div></div>
+      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/flow/step-1.webp" alt="Professional removal"><div><div class="pt">Removal is separate</div><div class="ps">Professional removal is chargeable, even right after completion.</div></div></div>
+      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/rules/rule-7.webp" alt="Confirm extras before the service"><div><div class="pt">Fresh set is separate</div><div class="ps">Any new application after a change is also chargeable.</div></div></div>
     </div>
     <label class="fl">Photo record</label>
     <div class="photogrid" id="photoGrid"></div>
@@ -473,18 +489,18 @@ const FAMILIES=[
   fam("pink","Pinks & Corals","A shade for every mood","P",["#FCE4EC","#F8C6D6","#F2A0B8","#F07C8E","#E0526E","#D63A5C","#C42E6B"]),
   fam("red","Reds","Bold · iconic","R",["#F4A0A0","#E25C5C","#CB2E2E","#A82020","#841A1A","#5E1010","#3A0808"]),
   fam("orange","Oranges & Yellows","Brighten your day","O",["#F6D38A","#F2B85C","#F09A3A","#F07A1E","#E8C12E","#E0D44A","#C9A11E"]),
-  fam("green","Greens","Fresh · distinctive","G",["#CDE6A0","#A6C970","#7FAE4A","#5C8A3A","#3E6B2E","#2E5A4A","#1E4A3A"]),
-  fam("blue","Blues","Calm · classy","B",["#CFE6F2","#A6CFE0","#7FB2CC","#5C92B0","#3A6E94","#284E78","#16365E"]),
-  fam("purple","Purples","Rich · creative","PU",["#E6D6F2","#C8AEE0","#A88ECB","#8A6EB6","#6E509A","#56387E","#3E2460"]),
-  fam("brown","Browns & Taupes","Earthy · modern","BR",["#E6D8C4","#D4BE9E","#BFA07E","#A88560","#8E6A46","#745234","#5A3E22"]),
-  fam("glitter","Glitter & Sparkle","Shine brighter","GL",["#E8C97A","#D4A44A","#C98A6E","#B07050","#9A8A4A","#D8B85A","#C9A030"]),
-  fam("shimmer","Shimmer & Pearl","Soft glow","SP",["#F2EAE0","#E8D8C8","#DCC8B8","#CFB8A6","#C2A894","#B09A82","#9A8670"]),
-  fam("metallic","Metallic","Bold reflections","M",["#D9B070","#C99A4A","#B6B6BE","#9A9AA0","#7E7E86","#5A6E8E","#3E5A7E"]),
-  fam("cateye","Cat Eye","Magnetic beauty","CE",["#3A2E5A","#2E4A4A","#5A2E4A","#4A3E2E","#2E3E5A","#5A4A2E","#3E2E4A"]),
-  fam("jelly","Jelly / Translucent","Sheer · playful","J",["#F2C6D6","#E6A6C8","#D88AB0","#C6A0D8","#A6C8E0","#C8E0A6","#E0C6A6"]),
-  fam("marble","Marble / Effects","Artistic","MB",["#E8E0D8","#D8C8BE","#C8B8A6","#B8A894","#A89880","#987C6A","#886852"]),
-  fam("neon","Neons","Vibrant · unmissable","NE",["#FFE04A","#FF8E1E","#FF3E5A","#C9FF2E","#2EFF8E","#2EC9FF","#FF2EC9"]),
-  fam("special","Specials","A little extra","S",["#1A1A1A","#FAFAFA","#D4A44A","#C9A030","#8A6E4A","#5A3E2A","#3A2A1A"]),
+  fam("green","Greens","Fresh · distinctive","G",["#CDE6A0","#A6C970","#7FAE4A","#5C8A3A","#1E4A3A"]),
+  fam("blue","Blues","Calm · classy","B",["#CFE6F2","#7FB2CC","#3A6E94","#284E78","#16365E"]),
+  fam("purple","Purples","Rich · creative","PU",["#E6D6F2","#C8AEE0","#8A6EB6","#56387E","#3E2460"]),
+  fam("brown","Browns & Taupes","Earthy · modern","BR",["#E6D8C4","#BFA07E","#A88560","#745234","#5A3E22"]),
+  fam("glitter","Glitter & Sparkle","Shine brighter","GL",["#E8C97A","#D4A44A","#C98A6E","#B07050","#9A8A4A"]),
+  fam("shimmer","Shimmer & Pearl","Soft glow","SP",["#F2EAE0","#E8D8C8","#DCC8B8","#C2A894","#9A8670"]),
+  fam("metallic","Metallic","Bold reflections","M",["#D9B070","#C99A4A","#B6B6BE","#7E7E86","#3E5A7E"]),
+  fam("cateye","Cat Eye","Magnetic beauty","CE",["#3A2E5A","#2E4A4A","#5A2E4A","#4A3E2E","#2E3E5A"]),
+  fam("jelly","Jelly / Translucent","Sheer · playful","J",["#F2C6D6","#E6A6C8","#D88AB0","#C6A0D8","#A6C8E0"]),
+  fam("marble","Marble / Effects","Artistic","MB",["#E8E0D8","#D8C8BE","#C8B8A6","#B8A894","#A89880"]),
+  fam("neon","Neons","Vibrant · unmissable","NE",["#FFE04A","#FF8E1E","#FF3E5A","#C9FF2E","#2EFF8E"]),
+  fam("special","Specials","A little extra","S",["#1A1A1A","#FAFAFA","#D4A44A","#C9A030","#8A6E4A"]),
 ];
 const COLOUR_FROM=[{id:"chart",nm:"Haya Chart"},{id:"ref",nm:"Reference Pic"},{id:"artist",nm:"Artist Rec"},{id:"multi",nm:"Multi-Colour"},{id:"clear",nm:"Clear / None"}];
 
@@ -522,15 +538,25 @@ function next(){ if(S.step<6) go(S.step+1); else complete(); }
 function back(){ if(S.step>1) go(S.step-1); }
 
 /* ============ PREVIEW (hero) ============ */
+function shapeAsset(shapeId){
+  const map={tsquare:"toes",trounded:"toes",tsquoval:"toes"};
+  return `assets/haya/shapes/${map[shapeId]||shapeId||"natural"}.webp`;
+}
+function designAsset(designId){
+  const map={ref:"reference",none:"plain"};
+  return `assets/haya/designs/${map[designId]||designId||"plain"}.webp`;
+}
+function colourAsset(family,code){
+  return family&&code?`assets/haya/colours/${family}/${code}.webp`:null;
+}
 function nailSvg(shapeId, lenId, colour, designId, big){
-  const shp = shapeSvgId[shapeId]||"shp-almond";
-  const i = lenId? lenIdx(lenId):3;
-  const h = 60 + i*8; // length scales height
-  const w = 40;
-  const fill = colour||"none";
-  const designLayer = designLayerSvg(designId, fill);
-  const fillAttr = fill==="none"?"fill=\"#F3DED9\"":`fill=\"${fill}\"`;
-  return `<svg viewBox=\"0 0 40 70\" width=\"${big?w*1.3:w}\" height=\"${big?h*1.3:h}\"><use href=\"#${shp}\" ${fillAttr} stroke=\"#2B231A\" stroke-width=\"1.5\"/>${designLayer}</svg>`;
+  const primary=designId?designAsset(designId):shapeAsset(shapeId);
+  const shape=shapeAsset(shapeId);
+  const selectedColour=colourAsset(S.colour.fam,S.colour.code);
+  const secondary=[];
+  if(designId&&shapeId) secondary.push(`<img class="preview-photo secondary" src="${shape}" alt="${shapeName(shapeId)} shape reference">`);
+  if(selectedColour) secondary.push(`<img class="preview-photo secondary" src="${selectedColour}" alt="${S.colour.code} colour swatch">`);
+  return `<div class="preview-collage"><img class="preview-photo" src="${primary}" alt="${designId?designName(designId):shapeName(shapeId)} visual reference">${secondary.join("")}</div>`;
 }
 function designLayerSvg(designId, fill){
   if(!designId||designId==="plain"||designId==="none") return "";
@@ -685,6 +711,20 @@ function selChoice(container,attr,fn){
   });
 }
 
+function serviceAsset(service){
+  if(service.group==="repair") return "assets/haya/flow/step-1.webp";
+  if(service.group==="ext") return "assets/haya/shapes/almond.webp";
+  if(service.id==="glitterg") return "assets/haya/designs/glitter.webp";
+  if(service.id==="jellyg") return "assets/haya/designs/jelly.webp";
+  if(service.id==="cateyeg") return "assets/haya/designs/cateye.webp";
+  return "assets/haya/designs/plain.webp";
+}
+function removalAsset(id){
+  if(id==="none") return "assets/haya/rules/rule-6.webp";
+  if(id==="unsure") return "assets/haya/rules/rule-7.webp";
+  return "assets/haya/flow/step-1.webp";
+}
+
 function mount2(){
   const showH=S.area==="hands"||S.area==="both", showF=S.area==="feet"||S.area==="both";
   const groups=[
@@ -697,7 +737,7 @@ function mount2(){
   groups.forEach(g=>{ if(!g.show) return;
     h+=`<div class="famhead"><div class="ft">${g.title}</div></div><div class="grid3">`;
     g.list.forEach(s=>{ const sel=S.services.includes(s.id)?"sel":""; const pr=s.price?inr(s.price):"Quote";
-      h+=`<div class="tile ${sel}" data-svc="${s.id}"><div class="ckdot">✓</div><svg viewBox="0 0 40 70" width="34" height="48"><use href="#${s.group==="ext"?"shp-almond":"shp-oval"}" fill="${s.group==="ext"?"#F3DED9":"#C98B86"}" stroke="#2B231A" stroke-width="1.5"/></svg><div style="font-family:var(--serif);font-size:15px;margin-top:6px">${s.nm}</div><div style="font-family:var(--mono);font-size:10px;color:var(--gold2);margin-top:3px">${pr}</div></div>`;
+      h+=`<div class="tile design-tile ${sel}" data-svc="${s.id}"><div class="ckdot">✓</div><img class="photoasset service-photo" src="${serviceAsset(s)}" alt="${s.nm} visual"><div style="font-family:var(--serif);font-size:15px;margin-top:6px">${s.nm}</div><div style="font-family:var(--mono);font-size:10px;color:var(--gold2);margin-top:3px">${pr}</div></div>`;
     });
     h+="</div>";
   });
@@ -709,7 +749,7 @@ function mount2(){
   // removal
   let rh="";
   REMOVALS.forEach(r=>{ const sel=S.removal===r.id?"sel":"";
-    rh+=`<div class="choice ${sel}" data-rem="${r.id}" style="padding:12px 8px"><div class="ck">✓</div><div class="nm" style="font-size:14px">${r.nm}</div><div class="pr">${r.sub}</div></div>`;
+    rh+=`<div class="choice ${sel}" data-rem="${r.id}" style="padding:7px"><div class="ck">✓</div><img class="photoasset service-photo" src="${removalAsset(r.id)}" alt="${r.nm} removal example"><div class="nm" style="font-size:14px;margin-top:6px">${r.nm}</div><div class="pr">${r.sub}</div></div>`;
   });
   $("remChoice").innerHTML=rh;
   document.querySelectorAll("[data-rem]").forEach(c=>c.onclick=()=>{S.removal=c.dataset.rem; mount2();});
@@ -728,7 +768,7 @@ function mount3(){
   $("recStart").onclick=openRecommender;
   let h="";
   list.forEach(sh=>{ const sel=S.shape.id===sh.id?"sel":""; const reds=sh.comp.filter(v=>v==="r").length;
-    h+=`<div class="tile ${sel}" data-shape="${sh.id}"><div class="ckdot">✓</div><svg viewBox="0 0 40 70" width="30" height="42"><use href="#${shapeSvgId[sh.id]}" fill="#F3DED9" stroke="#2B231A" stroke-width="1.5"/></svg><div style="font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;font-weight:600;margin-top:6px">${sh.nm}</div><div class="dots">${sh.comp.map(v=>`<i class="${dotCls(v)}"></i>`).join("")}</div></div>`;
+    h+=`<div class="tile shape-tile ${sel}" data-shape="${sh.id}"><div class="ckdot">✓</div><img class="photoasset" src="${shapeAsset(sh.id)}" alt="${sh.nm} nail shape"><div style="font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;font-weight:600;margin-top:6px">${sh.nm}</div><div class="dots">${sh.comp.map(v=>`<i class="${dotCls(v)}"></i>`).join("")}</div></div>`;
   });
   $("shapeGrid").innerHTML=h;
   document.querySelectorAll("[data-shape]").forEach(c=>c.onclick=()=>{
@@ -740,7 +780,7 @@ function mount3(){
     $("lenLabel").style.display="block";
     let lh="";
     LENGTHS.forEach((ln,i)=>{ const v=sh.comp[i]; const dim=v==="r"?"dim":""; const sel=S.length.id===ln.id?"sel":"";
-      lh+=`<div class="tile lencard ${sel} ${dim}" data-len="${ln.id}"><div class="bar"><svg viewBox="0 0 40 70" width="18" height="${20+i*5}"><use href="#${shapeSvgId[sh.id]}" fill="${S.colour.c||"#F3DED9"}" stroke="#2B231A" stroke-width="1.5"/></svg></div><div class="nm">${ln.nm}</div><div class="mm">${ln.mm}</div><div class="dot ${dotCls(v)}"></div></div>`;
+      lh+=`<div class="tile lencard length-tile ${sel} ${dim}" data-len="${ln.id}"><img class="photoasset" src="assets/haya/lengths/${ln.id}.webp" alt="${ln.nm} nail length"><div class="nm">${ln.nm}</div><div class="mm">${ln.mm}</div><div class="dot ${dotCls(v)}"></div></div>`;
     });
     $("lenRow").innerHTML=lh;
     document.querySelectorAll("[data-len]").forEach(c=>c.onclick=()=>{
@@ -762,7 +802,7 @@ function mount4(){
   const b=lenBucket(S.length.id);
   let dh="";
   DESIGNS.forEach(d=>{ const v=d.comp[b]; const locked=v==="r"; const sel=S.design.id===d.id?"sel":""; const dim=locked?"dim":"";
-    dh+=`<div class="tile ${sel} ${dim}" data-des="${d.id}" ${locked?'data-lock="1"':""}><div class="ckdot">✓</div><div style="height:48px;display:flex;align-items:center;justify-content:center">${desMini(d.id)}</div><div style="font-family:var(--serif);font-size:15px;margin-top:5px">${d.nm}</div><div class="dots">${d.comp.map(x=>`<i class="${dotCls(x)}"></i>`).join("")}</div></div>`;
+    dh+=`<div class="tile design-tile ${sel} ${dim}" data-des="${d.id}" ${locked?'data-lock="1"':""}><div class="ckdot">✓</div>${desMini(d.id)}<div style="font-family:var(--serif);font-size:15px;margin-top:5px">${d.nm}</div><div class="dots">${d.comp.map(x=>`<i class="${dotCls(x)}"></i>`).join("")}</div></div>`;
   });
   $("desGrid").innerHTML=dh;
   document.querySelectorAll("[data-des]").forEach(c=>c.onclick=()=>{
@@ -798,7 +838,7 @@ function mount4(){
   const fam=FAMILIES.find(x=>x.id===(S.colour.fam||FAMILIES[0].id));
   $("famTitle").textContent=fam.nm; $("famTag").textContent=fam.tag;
   let ch=""; fam.chips.forEach(c=>{ const sel=S.colour.code===c.code?"sel":"";
-    ch+=`<div class="tile ${sel}" data-code="${c.code}" data-c="${c.c}"><div class="ckdot">✓</div><div style="width:46px;height:64px;margin:0 auto;border:1.5px solid #2B231A;background:${c.c};box-shadow:inset 0 -6px 8px rgba(0,0,0,.12);position:relative"></div><div style="font-family:var(--mono);font-size:9.5px;margin-top:5px;font-weight:600">${c.code}</div></div>`;
+    ch+=`<div class="tile colour-tile ${sel}" data-code="${c.code}" data-c="${c.c}"><div class="ckdot">✓</div><img class="photoasset" src="${colourAsset(fam.id,c.code)}" alt="${c.code} real colour swatch"><div style="font-family:var(--mono);font-size:9.5px;margin-top:5px;font-weight:600">${c.code}</div></div>`;
   });
   $("chipGrid").innerHTML=ch;
   document.querySelectorAll("[data-code]").forEach(c=>c.onclick=()=>{
@@ -816,22 +856,7 @@ function mount4(){
   $("next4").disabled=!S.colour.code; $("back4").onclick=back; $("next4").onclick=next;
 }
 function desMini(id){
-  const m={plain:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#C98B86;border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    french:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:linear-gradient(180deg,#F3DED9 65%,#fff 65%);border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    jelly:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#F2C6D6;opacity:.6;border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    glitter:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:repeating-linear-gradient(45deg,#E8C97A 0 2px,#D4A44A 2px 4px);border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    cateye:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:linear-gradient(90deg,#3A2E5A,#5A4A2E,#3A2E5A);border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    ombre:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:linear-gradient(180deg,#F3DED9,#E0526E);border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    chrome:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:linear-gradient(120deg,#D9B070,#fff,#9A9AA0);border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    marble:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:linear-gradient(120deg,#E8E0D8,#B8A894,#E8E0D8);border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    minimal:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#F3DED9;border-radius:50% 50% 30% 30%/60% 60% 30% 30%;position:relative"></div>`,
-    "3d":`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#F3DED9;border-radius:50% 50% 30% 30%/60% 60% 30% 30%;position:relative"></div>`,
-    "4d":`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#F3DED9;border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    charms:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#F3DED9;border-radius:50% 50% 30% 30%/60% 60% 30% 30%"></div>`,
-    ref:`<div style="width:34px;height:48px;border:1.5px dashed #C29A3D;background:#FAF4EA;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#C29A3D;font-size:18px">🖼</div>`,
-    toeart:`<div style="width:30px;height:38px;border:1.5px solid #2B231A;background:#F3DED9;border-radius:14px 14px 18px 18px"></div>`,
-    none:`<div style="width:34px;height:48px;border:1.5px solid #2B231A;background:#F3DED9;border-radius:30% 30% 24px 24px;opacity:.5"></div>`};
-  return m[id]||m.plain;
+  return `<img class="photoasset" src="${designAsset(id)}" alt="${designName(id)} realistic examples">`;
 }
 
 function mount5(){
@@ -845,7 +870,16 @@ function mount5(){
   document.querySelectorAll("[data-chk]").forEach(c=>c.onclick=()=>{const id=c.dataset.chk; S.checks=S.checks.includes(id)?S.checks.filter(x=>x!==id):[...S.checks,id]; mount5();});
   $("next5").disabled=S.checks.length<4; $("back5").onclick=back; $("next5").onclick=next;
 }
-function chkPic(id){if(id==="changes")return`<span style="font-size:24px;color:var(--gold2)">💬</span>`;return`<svg viewBox="0 0 40 70" width="26" height="36"><use href="#${id==="shape"?"shp-almond":id==="length"?"shp-coffin":"shp-oval"}" fill="${S.colour.c||"#F3DED9"}" stroke="#2B231A" stroke-width="1.5"/></svg>`;}
+function chkPic(id){
+  const assets={
+    shape:"assets/haya/flow/step-3.webp",
+    length:"assets/haya/flow/step-4.webp",
+    colour:"assets/haya/flow/step-5.webp",
+    design:"assets/haya/flow/step-6.webp",
+    changes:"assets/haya/flow/step-7.webp"
+  };
+  return `<img class="photoasset" style="height:54px;object-fit:cover" src="${assets[id]}" alt="${id} approval reference">`;
+}
 
 function mount6(){
   renderPreview("p6preview",true);
@@ -885,7 +919,10 @@ function mount6(){
   initSig($("sigPad"));
   $("next6").disabled=!(S.marketing&&S.signed); $("back6").onclick=back; $("next6").onclick=next;
 }
-function photoCard(key,label){const v=S.photos[key];return`<div class="photocard"><div class="lbl">${label}</div><div class="ph">${v==="taken"?"✓":"📷"}</div><div class="opts"><button class="${v==="taken"?"on":""}" data-photo="${key}" data-v="taken">Taken</button><button class="${v==="skipped"?"on":""}" data-photo="${key}" data-v="skipped">Skipped</button></div></div>`;}
+function photoCard(key,label){
+  const v=S.photos[key];
+  return `<div class="photocard"><div class="lbl">${label}</div><div class="ph" style="padding:4px"><img class="photoasset" style="height:100%;object-fit:cover" src="assets/haya/rules/rule-8.webp" alt="Clear nail photo example"></div><div class="opts"><button class="${v==="taken"?"on":""}" data-photo="${key}" data-v="taken">Taken</button><button class="${v==="skipped"?"on":""}" data-photo="${key}" data-v="skipped">Skipped</button></div></div>`;
+}
 
 /* ============ STAFF ============ */
 function mountStaff(){
