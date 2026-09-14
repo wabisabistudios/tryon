@@ -20,7 +20,9 @@ def save_crop(source, box, destination, size=None):
     if size:
         image.thumbnail(size, Image.Resampling.LANCZOS)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    image.save(destination, "WEBP", quality=88, method=6)
+    # JPEG is deliberate: the chair tablets and older macOS/WebKit builds
+    # have produced black/blank VP8 WebP tiles with these source exports.
+    image.save(destination, "JPEG", quality=91, optimize=True, progressive=True)
 
 
 def crop_shape_cards():
@@ -37,7 +39,7 @@ def crop_shape_cards():
         save_crop(
             POSTERS["shape"],
             (xs[col][0] + 5, top + 7, xs[col][1] - 5, top + 151),
-            OUT / "shapes" / f"{name}.webp",
+            OUT / "shapes" / f"{name}.jpg",
             (310, 400),
         )
 
@@ -49,7 +51,7 @@ def crop_shape_cards():
         save_crop(
             POSTERS["shape"],
             (left, 825, right, 918),
-            OUT / "lengths" / f"{name}.webp",
+            OUT / "lengths" / f"{name}.jpg",
             (180, 300),
         )
 
@@ -69,7 +71,7 @@ def crop_design_cards():
         save_crop(
             POSTERS["design"],
             (xs[col][0] + 4, top + 34, xs[col][1] - 4, top + 150),
-            OUT / "designs" / f"{name}.webp",
+            OUT / "designs" / f"{name}.jpg",
             (320, 360),
         )
 
@@ -81,7 +83,7 @@ def crop_rule_cards():
         save_crop(
             POSTERS["rules"],
             (left, 225, min(left + 104, 850), 589),
-            OUT / "flow" / f"step-{index + 1}.webp",
+            OUT / "flow" / f"step-{index + 1}.jpg",
             (220, 500),
         )
 
@@ -92,7 +94,7 @@ def crop_rule_cards():
             save_crop(
                 POSTERS["rules"],
                 (left, y[0], min(left + 207, 850), y[1]),
-                OUT / "rules" / f"rule-{row * 4 + col + 1}.webp",
+                OUT / "rules" / f"rule-{row * 4 + col + 1}.jpg",
                 (420, 360),
             )
 
@@ -126,7 +128,7 @@ def crop_colour_chips():
             save_crop(
                 POSTERS["colour"],
                 (x1, top + 22, x2, bottom - 18),
-                OUT / "colours" / family / f"{code}.webp",
+                OUT / "colours" / family / f"{code}.jpg",
                 (150, 230),
             )
 
@@ -136,7 +138,7 @@ def copy_full_guides():
         save_crop(
             source,
             (0, 0, Image.open(source).width, Image.open(source).height),
-            OUT / "guides" / f"{name}.webp",
+            OUT / "guides" / f"{name}.jpg",
             (1400, 1400),
         )
 

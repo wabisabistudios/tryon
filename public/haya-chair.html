@@ -277,14 +277,14 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
     <input class="field" id="fMobile" inputmode="numeric" placeholder="10-digit number">
     <label class="fl">First nail appointment with Haya?</label>
     <div class="choices two" id="fvChoice">
-      <div class="choice" data-fv="yes"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/plain.webp" alt="Natural pink nails"></div><div class="nm">Yes, first time</div></div>
-      <div class="choice" data-fv="no"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/reference.webp" alt="Finished Haya nail set"></div><div class="nm">No, I've been</div></div>
+      <div class="choice" data-fv="yes"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/plain.jpg" alt="Natural pink nails"></div><div class="nm">Yes, first time</div></div>
+      <div class="choice" data-fv="no"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/reference.jpg" alt="Finished Haya nail set"></div><div class="nm">No, I've been</div></div>
     </div>
     <label class="fl">What are we working on?</label>
     <div class="choices three" id="areaChoice">
-      <div class="choice" data-area="hands"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/reference.webp" alt="Hand nail service"></div><div class="nm">Hands</div></div>
-      <div class="choice" data-area="feet"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/toeart.webp" alt="Toe nail service"></div><div class="nm">Feet</div></div>
-      <div class="choice" data-area="both"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/rules/rule-4.webp" alt="Hands and feet service"></div><div class="nm">Both</div></div>
+      <div class="choice" data-area="hands"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/reference.jpg" alt="Hand nail service"></div><div class="nm">Hands</div></div>
+      <div class="choice" data-area="feet"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/designs/toeart.jpg" alt="Toe nail service"></div><div class="nm">Feet</div></div>
+      <div class="choice" data-area="both"><div class="ck">✓</div><div class="pic"><img class="photoasset" src="assets/haya/rules/rule-4.jpg" alt="Hands and feet service"></div><div class="nm">Both</div></div>
     </div>
     <div class="navrow"><button class="btn quiet" id="back1">Back</button><button class="btn gold" id="next1" disabled>Next</button></div>
   </div></section>
@@ -354,9 +354,9 @@ label.fl{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1
     <div id="p6price"></div>
     <label class="fl">Good to know</label>
     <div class="polgrid">
-      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/rules/rule-1.webp" alt="Reference design is not an exact-copy promise"><div><div class="pt">Dislike = new service</div><div class="ps">A later change of preference is a new, chargeable service.</div></div></div>
-      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/flow/step-1.webp" alt="Professional removal"><div><div class="pt">Removal is separate</div><div class="ps">Professional removal is chargeable, even right after completion.</div></div></div>
-      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/rules/rule-7.webp" alt="Confirm extras before the service"><div><div class="pt">Fresh set is separate</div><div class="ps">Any new application after a change is also chargeable.</div></div></div>
+      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/rules/rule-1.jpg" alt="Reference design is not an exact-copy promise"><div><div class="pt">Dislike = new service</div><div class="ps">A later change of preference is a new, chargeable service.</div></div></div>
+      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/flow/step-1.jpg" alt="Professional removal"><div><div class="pt">Removal is separate</div><div class="ps">Professional removal is chargeable, even right after completion.</div></div></div>
+      <div class="polcard"><img class="photoasset" style="width:104px;height:76px;object-fit:cover" src="assets/haya/rules/rule-7.jpg" alt="Confirm extras before the service"><div><div class="pt">Fresh set is separate</div><div class="ps">Any new application after a change is also chargeable.</div></div></div>
     </div>
     <label class="fl">Photo record</label>
     <div class="photogrid" id="photoGrid"></div>
@@ -540,14 +540,14 @@ function back(){ if(S.step>1) go(S.step-1); }
 /* ============ PREVIEW (hero) ============ */
 function shapeAsset(shapeId){
   const map={tsquare:"toes",trounded:"toes",tsquoval:"toes"};
-  return `assets/haya/shapes/${map[shapeId]||shapeId||"natural"}.webp`;
+  return `assets/haya/shapes/${map[shapeId]||shapeId||"natural"}.jpg`;
 }
 function designAsset(designId){
   const map={ref:"reference",none:"plain"};
-  return `assets/haya/designs/${map[designId]||designId||"plain"}.webp`;
+  return `assets/haya/designs/${map[designId]||designId||"plain"}.jpg`;
 }
 function colourAsset(family,code){
-  return family&&code?`assets/haya/colours/${family}/${code}.webp`:null;
+  return family&&code?`assets/haya/colours/${family}/${code}.jpg`:null;
 }
 function nailSvg(shapeId, lenId, colour, designId, big){
   const primary=designId?designAsset(designId):shapeAsset(shapeId);
@@ -712,17 +712,17 @@ function selChoice(container,attr,fn){
 }
 
 function serviceAsset(service){
-  if(service.group==="repair") return "assets/haya/flow/step-1.webp";
-  if(service.group==="ext") return "assets/haya/shapes/almond.webp";
-  if(service.id==="glitterg") return "assets/haya/designs/glitter.webp";
-  if(service.id==="jellyg") return "assets/haya/designs/jelly.webp";
-  if(service.id==="cateyeg") return "assets/haya/designs/cateye.webp";
-  return "assets/haya/designs/plain.webp";
+  if(service.group==="repair") return "assets/haya/flow/step-1.jpg";
+  if(service.group==="ext") return "assets/haya/shapes/almond.jpg";
+  if(service.id==="glitterg") return "assets/haya/designs/glitter.jpg";
+  if(service.id==="jellyg") return "assets/haya/designs/jelly.jpg";
+  if(service.id==="cateyeg") return "assets/haya/designs/cateye.jpg";
+  return "assets/haya/designs/plain.jpg";
 }
 function removalAsset(id){
-  if(id==="none") return "assets/haya/rules/rule-6.webp";
-  if(id==="unsure") return "assets/haya/rules/rule-7.webp";
-  return "assets/haya/flow/step-1.webp";
+  if(id==="none") return "assets/haya/rules/rule-6.jpg";
+  if(id==="unsure") return "assets/haya/rules/rule-7.jpg";
+  return "assets/haya/flow/step-1.jpg";
 }
 
 function mount2(){
@@ -780,7 +780,7 @@ function mount3(){
     $("lenLabel").style.display="block";
     let lh="";
     LENGTHS.forEach((ln,i)=>{ const v=sh.comp[i]; const dim=v==="r"?"dim":""; const sel=S.length.id===ln.id?"sel":"";
-      lh+=`<div class="tile lencard length-tile ${sel} ${dim}" data-len="${ln.id}"><img class="photoasset" src="assets/haya/lengths/${ln.id}.webp" alt="${ln.nm} nail length"><div class="nm">${ln.nm}</div><div class="mm">${ln.mm}</div><div class="dot ${dotCls(v)}"></div></div>`;
+      lh+=`<div class="tile lencard length-tile ${sel} ${dim}" data-len="${ln.id}"><img class="photoasset" src="assets/haya/lengths/${ln.id}.jpg" alt="${ln.nm} nail length"><div class="nm">${ln.nm}</div><div class="mm">${ln.mm}</div><div class="dot ${dotCls(v)}"></div></div>`;
     });
     $("lenRow").innerHTML=lh;
     document.querySelectorAll("[data-len]").forEach(c=>c.onclick=()=>{
@@ -872,11 +872,11 @@ function mount5(){
 }
 function chkPic(id){
   const assets={
-    shape:"assets/haya/flow/step-3.webp",
-    length:"assets/haya/flow/step-4.webp",
-    colour:"assets/haya/flow/step-5.webp",
-    design:"assets/haya/flow/step-6.webp",
-    changes:"assets/haya/flow/step-7.webp"
+    shape:"assets/haya/flow/step-3.jpg",
+    length:"assets/haya/flow/step-4.jpg",
+    colour:"assets/haya/flow/step-5.jpg",
+    design:"assets/haya/flow/step-6.jpg",
+    changes:"assets/haya/flow/step-7.jpg"
   };
   return `<img class="photoasset" style="height:54px;object-fit:cover" src="${assets[id]}" alt="${id} approval reference">`;
 }
@@ -921,7 +921,7 @@ function mount6(){
 }
 function photoCard(key,label){
   const v=S.photos[key];
-  return `<div class="photocard"><div class="lbl">${label}</div><div class="ph" style="padding:4px"><img class="photoasset" style="height:100%;object-fit:cover" src="assets/haya/rules/rule-8.webp" alt="Clear nail photo example"></div><div class="opts"><button class="${v==="taken"?"on":""}" data-photo="${key}" data-v="taken">Taken</button><button class="${v==="skipped"?"on":""}" data-photo="${key}" data-v="skipped">Skipped</button></div></div>`;
+  return `<div class="photocard"><div class="lbl">${label}</div><div class="ph" style="padding:4px"><img class="photoasset" style="height:100%;object-fit:cover" src="assets/haya/rules/rule-8.jpg" alt="Clear nail photo example"></div><div class="opts"><button class="${v==="taken"?"on":""}" data-photo="${key}" data-v="taken">Taken</button><button class="${v==="skipped"?"on":""}" data-photo="${key}" data-v="skipped">Skipped</button></div></div>`;
 }
 
 /* ============ STAFF ============ */
