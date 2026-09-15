@@ -5,16 +5,22 @@ A self-hosted deal finder built on the existing Cloudflare Worker. It scrapes Am
 ## Local development
 
 ```bash
-# 1. Start the Worker (with local D1 + KV)
-cd worker
-npx wrangler d1 migrations apply deals-db --local
-npx wrangler dev --local
+# install dependencies once
+npm install
 
-# 2. In another terminal, serve the frontend
-cd ..
-npx serve public -p 3000
-# open http://localhost:3000/deals.html
+# start the Worker + static server together
+npm run dev:deals
+
+# open the UI
+open http://localhost:3000/deals.html
 ```
+
+This runs two processes:
+- `http://localhost:8788` — the Cloudflare Worker API
+- `http://localhost:3000/deals.html` — the DealHawk UI (served by `serve`)
+
+The Worker uses a **local D1 database and KV cache**, so the migration is applied automatically.
+
 
 ## Endpoints
 

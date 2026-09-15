@@ -1,0 +1,17 @@
+{
+  "name": "tryon-deals",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Based Aesthetics try-on + DealHawk deal finder",
+  "scripts": {
+    "dev:deals": "concurrently \"npm run worker:dev\" \"npm run serve:deals\"",
+    "worker:dev": "cd worker && npx wrangler d1 migrations apply deals-db --local && npx wrangler dev --local",
+    "serve:deals": "npx serve public -p 3000",
+    "deploy:deals": "cd worker && npx wrangler d1 migrations apply deals-db && npx wrangler deploy",
+    "worker:deploy": "cd worker && npx wrangler deploy"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "serve": "^14.2.0"
+  }
+}
