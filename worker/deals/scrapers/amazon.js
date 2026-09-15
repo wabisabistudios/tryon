@@ -141,7 +141,7 @@ export async function searchAmazon(query, env) {
   }
 
   try {
-    const res = await politeFetch(url, { retries: 1, minDelayMs: 800 });
+    const res = await politeFetch(url, { retries: 0, minDelayMs: 500, timeoutMs: 2500 });
     const html = await res.text();
 
     if (html.includes("Enter the characters you see below") || html.includes("Captcha") || html.includes("api-services-support")) {

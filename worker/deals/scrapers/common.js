@@ -84,8 +84,8 @@ export async function politeFetch(url, options = {}) {
 }
 
 /**
- * Simple robots.txt checker. Caches result for 24h in KV under `robots:<host>`.
- * Returns true if path is allowed.
+ * robots.txt checker. Caches result for 24h in KV under `robots:<host>`.
+ * Returns true if path is allowed. Supports * wildcards conservatively.
  */
 export async function isAllowedByRobots(url, env) {
   try {
@@ -99,38 +99,69 @@ export async function isAllowedByRobots(url, env) {
     if (cached === "ALLOWED") return true;
 
     const robotsUrl = `${u.protocol}//${u.hostname}/robots.txt`;
-    const res = await fetch(robotsUrl, { headers: { "User-Agent": pickUA() } });
-    if (!res.ok) {
+    let text = "";
+    try {
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 3000);
+      const res = await fetch(robotsUrl, { headers: { "User-Agent": pickUA() }, signal: controller.signal });
+      clearTimeout(t);
+      if (!res.ok) {
+        if (env.DEALS) await env.DEALS.put(key, "ALLOWED", { expirationTtl: 86400 });
+        return true;
+      }
+      text = await res.text();
+    } catch {
       if (env.DEALS) await env.DEALS.put(key, "ALLOWED", { expirationTtl: 86400 });
       return true;
     }
-    const text = await res.text();
     const lines = text.split("\n");
-    let userAgentRelevant = false;
-    let disallowed = [];
+    // We comply with the most specific matching UA. For a generic crawler,
+    // that is the wildcard '*' section. We intentionally do not assume
+    // the identity of named bots (Amazon marks many of those Disallow: /).
+    let currentUA = null;
+    let wildcardRules = [];
+    let namedRules = new Map();
 
     for (const raw of lines) {
       const line = raw.trim();
       if (!line || line.startsWith("#")) continue;
-      const [directive, ...valueParts] = line.split(":");
-      const value = valueParts.join(":").trim();
-      if (!directive) continue;
-      const d = directive.trim().toLowerCase();
-      if (d === "user-agent") {
-        userAgentRelevant = value === "*" || value.toLowerCase().includes("bot");
-      } else if (userAgentRelevant && d === "disallow") {
-        disallowed.push(value);
+      const idx = line.indexOf(":");
+      if (idx === -1) continue;
+      const directive = line.slice(0, idx).trim().toLowerCase();
+      const value = line.slice(idx + 1).trim();
+      if (directive === "user-agent") {
+        currentUA = value.toLowerCase();
+      } else if (currentUA && directive === "disallow" && value) {
+        if (currentUA === "*") wildcardRules.push(value);
+        else {
+          if (!namedRules.has(currentUA)) namedRules.set(currentUA, []);
+          namedRules.get(currentUA).push(value);
+        }
       }
     }
 
-    const path = u.pathname;
-    const blocked = disallowed.some((prefix) => path.startsWith(prefix));
+    const path = u.pathname + u.search;
+    const blocked = wildcardRules.some((rule) => robotsMatch(rule, path));
     if (env.DEALS) {
       await env.DEALS.put(key, blocked ? "BLOCKED" : "ALLOWED", { expirationTtl: 86400 });
     }
     return !blocked;
   } catch {
     return true;
+  }
+}
+
+function robotsMatch(rule, path) {
+  // Escape regex special chars, then turn * into .*
+  const re = rule
+    .split("*")
+    .map((s) => s.replace(/[.+?^${}()|[\]\\]/g, "\\$&"))
+    .join(".*");
+  const pattern = re.startsWith(".*") ? re : "^" + re;
+  try {
+    return new RegExp(pattern).test(path);
+  } catch {
+    return path.startsWith(rule);
   }
 }
 

@@ -164,9 +164,14 @@ img{display:block;max-width:100%}
 <div class="footer-note">Prices update on demand. Confidence scores need at least 3 price samples to detect anomalies reliably.</div>
 
 <script>
-const API = '/deals/search';
+// In dev, the API may run on a different port than the static page.
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:8788'
+  : '';
+const API = API_BASE + '/deals/search';
 let currentFilter = 'all';
 let currentResults = [];
+let demoMode = false;
 
 const qInput = document.getElementById('q');
 qInput.addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
@@ -224,11 +229,19 @@ async function search(){
     if (!res.ok) throw new Error(data.error || 'Search failed');
 
     currentResults = data.results || [];
-    const amazonStatus = data.source_status?.amazon_in;
-    const ok = amazonStatus?.ok;
-    statusText.innerHTML = ok
-      ? `Found ${data.total} listings. Showing ${currentResults.length} scored deals.`
-      : `<span class="warn">Amazon scrape issue: ${amazonStatus?.error || 'unknown'} — showing cached/limited results.</span>`;
+    demoMode = data.demo_mode || false;
+    const realOk = data.source_status?.amazon_in?.ok || data.source_status?.flipkart?.ok;
+    if (demoMode) {
+      statusText.innerHTML = `<span class="warn">Real scrapers are blocked from this server (Amazon/Flipkart anti-bot). Showing demo data so you can test the scoring engine.</span>`;
+    } else if (realOk) {
+      statusText.innerHTML = `Found ${data.total} listings. Showing ${currentResults.length} scored deals.`;
+    } else {
+      const errs = Object.entries(data.source_status || {})
+        .filter(([_, v]) => !v.ok && v.error)
+        .map(([k, v]) => `${k}: ${v.error}`)
+        .join(' · ');
+      statusText.innerHTML = `<span class="warn">Source issues: ${errs || 'unknown'}</span>`;
+    }
     render();
   }catch(err){
     statusText.innerHTML = `<span class="warn">Error: ${err.message}</span>`;

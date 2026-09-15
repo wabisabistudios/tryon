@@ -24,6 +24,8 @@
  */
 
 import { searchAmazon } from "./deals/scrapers/amazon.js";
+import { searchFlipkart } from "./deals/scrapers/flipkart.js";
+import { searchDemo } from "./deals/scrapers/demo.js";
 import {
   upsertProduct,
   insertPrice,
@@ -43,6 +45,9 @@ const ALLOWED_ORIGINS = [
   "https://basedaesthetics.co",
   "https://www.basedaesthetics.co",
   "http://localhost:8788",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:5500",
 ];
 
 /**
@@ -158,7 +163,7 @@ export default {
         return await handleDealsSearch(request, env, cors);
       }
       if (url.pathname === "/deals/best" && request.method === "GET") {
-        return await handleDealsBest(env, cors);
+        return await handleDealsBest(request, env, cors);
       }
       if (url.pathname.startsWith("/deals/item/") && request.method === "GET") {
         return await handleDealsItem(url.pathname, env, cors);
@@ -398,11 +403,17 @@ async function handleDealsSearch(request, env, cors) {
   }
 
   const db = env.DEALS_DB;
-  const amazon = await searchAmazon(query, env);
+  const [amazon, flipkart] = await Promise.all([
+    searchAmazon(query, env),
+    searchFlipkart(query, env),
+  ]);
+  let useDemo = false;
   const all = [];
+  const perSourceLimit = Math.ceil(limit / 2) + 4;
 
-  if (amazon.ok && amazon.items) {
-    for (const item of amazon.items.slice(0, limit)) {
+  for (const sourceResult of [amazon, flipkart]) {
+    if (!sourceResult.ok || !sourceResult.items) continue;
+    for (const item of sourceResult.items.slice(0, perSourceLimit)) {
       const pid = productId(item.source, item.source_id);
       await upsertProduct(db, item);
       await insertPrice(db, pid, item);
@@ -411,7 +422,23 @@ async function handleDealsSearch(request, env, cors) {
     }
   }
 
-  await logSearch(db, query, "amazon_in", all.length);
+  // If real scrapers are blocked (common from serverless IPs), fall back to
+  // demo data so the scoring engine and UI remain testable.
+  if (all.length === 0) {
+    const demo = await searchDemo(query, env);
+    if (demo.ok && demo.items) {
+      useDemo = true;
+      for (const item of demo.items.slice(0, limit)) {
+        const pid = productId(item.source, item.source_id);
+        await upsertProduct(db, item);
+        await insertPrice(db, pid, item);
+        const history = item.demo_history || [];
+        all.push({ ...item, product_id: pid, history });
+      }
+    }
+  }
+
+  await logSearch(db, query, useDemo ? "demo" : "all", all.length);
 
   const historyMap = new Map();
   for (const item of all) {
@@ -419,10 +446,15 @@ async function handleDealsSearch(request, env, cors) {
   }
 
   const scored = scoreDeals(all, historyMap);
-  const best = filterBestDeals(scored, 40);
+  const best = filterBestDeals(scored, 30);
   const response = {
     query,
-    source_status: { amazon_in: { ok: amazon.ok, count: amazon.items?.length || 0, error: amazon.error || null } },
+    source_status: {
+      amazon_in: { ok: amazon.ok, count: amazon.items?.length || 0, error: amazon.error || null },
+      flipkart: { ok: flipkart.ok, count: flipkart.items?.length || 0, error: flipkart.error || null },
+      demo: { ok: useDemo, count: useDemo ? all.length : 0 },
+    },
+    demo_mode: useDemo,
     results: best,
     total: scored.length,
   };
@@ -431,11 +463,11 @@ async function handleDealsSearch(request, env, cors) {
   return json(response, 200, cors);
 }
 
-async function handleDealsBest(env, cors) {
+async function handleDealsBest(request, env, cors) {
   if (!env.DEALS_DB) {
     return json({ error: "Deal database not configured." }, 503, cors);
   }
-  const url = new URL(request.url || "http://localhost/deals/best");
+  const url = new URL(request.url);
   const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 50);
 
   const db = env.DEALS_DB;
@@ -477,7 +509,7 @@ async function handleDealsBest(env, cors) {
   }
 
   const scored = scoreDeals(items, historyMap);
-  const best = filterBestDeals(scored, 45).slice(0, limit);
+  const best = scored.slice(0, limit);
   return json({ deals: best, total: scored.length }, 200, cors);
 }
 
