@@ -4,7 +4,7 @@ compatibility_date = "2026-07-01"
 
 routes = [
   { pattern = "basedaesthetics.co/api/tryon*", zone_name = "basedaesthetics.co" },
-  { pattern = "basedaesthetics.co/deals*", zone_name = "basedaesthetics.co" }
+  { pattern = "basedaesthetics.co/api/deals*", zone_name = "basedaesthetics.co" }
 ]
 
 # wrangler kv namespace create TRYON  →  paste the id below

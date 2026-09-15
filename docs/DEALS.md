@@ -18,9 +18,9 @@ npx serve public -p 3000
 
 ## Endpoints
 
-- `GET /deals/search?q=monitor&limit=20` — search and score deals
-- `GET /deals/best?limit=20` — best deals from recent scrapes
-- `GET /deals/item/:id` — product detail + price history
+- `GET /api/deals/search?q=monitor&limit=20` — search and score deals
+- `GET /api/deals/best?limit=20` — best deals from recent scrapes
+- `GET /api/deals/item/:id` — product detail + price history
 
 ## Architecture
 

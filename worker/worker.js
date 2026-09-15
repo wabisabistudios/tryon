@@ -10,9 +10,9 @@
  *   POST /api/tryon/book             — {slot, name, phone, designId, renderId} → GHL contact + appointment
  *
  * DEALS Endpoints:
- *   GET  /deals/search?q=monitor&limit=20   — search and score deals
- *   GET  /deals/best?limit=20               — best current deals
- *   GET  /deals/item/:id                    — product detail + price history
+ *   GET  /api/deals/search?q=monitor&limit=20   — search and score deals
+ *   GET  /api/deals/best?limit=20               — best current deals
+ *   GET  /api/deals/item/:id                    — product detail + price history
  *
  * Secrets: GEMINI_API_KEY, GHL_API_KEY
  * Vars:    DAILY_RENDER_CAP (400), SESSION_RENDER_CAP (6),
@@ -159,13 +159,13 @@ export default {
       if (url.pathname === "/api/tryon/book" && request.method === "POST") {
         return await handleBook(request, env, cors);
       }
-      if (url.pathname === "/deals/search" && request.method === "GET") {
+      if (url.pathname === "/api/deals/search" && request.method === "GET") {
         return await handleDealsSearch(request, env, cors);
       }
-      if (url.pathname === "/deals/best" && request.method === "GET") {
+      if (url.pathname === "/api/deals/best" && request.method === "GET") {
         return await handleDealsBest(request, env, cors);
       }
-      if (url.pathname.startsWith("/deals/item/") && request.method === "GET") {
+      if (url.pathname.startsWith("/api/deals/item/") && request.method === "GET") {
         return await handleDealsItem(url.pathname, env, cors);
       }
     } catch (e) {
@@ -517,7 +517,7 @@ async function handleDealsItem(pathname, env, cors) {
   if (!env.DEALS_DB) {
     return json({ error: "Deal database not configured." }, 503, cors);
   }
-  const id = pathname.replace("/deals/item/", "").trim();
+  const id = pathname.replace("/api/deals/item/", "").trim();
   if (!id) return json({ error: "Product id required." }, 400, cors);
 
   const db = env.DEALS_DB;
