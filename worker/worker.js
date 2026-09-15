@@ -25,6 +25,7 @@
 
 import { searchAmazon } from "./deals/scrapers/amazon.js";
 import { searchFlipkart } from "./deals/scrapers/flipkart.js";
+import { searchOlx } from "./deals/scrapers/olx.js";
 import { searchDemo } from "./deals/scrapers/demo.js";
 import {
   upsertProduct,
@@ -403,15 +404,16 @@ async function handleDealsSearch(request, env, cors) {
   }
 
   const db = env.DEALS_DB;
-  const [amazon, flipkart] = await Promise.all([
+  const [amazon, flipkart, olx] = await Promise.all([
     searchAmazon(query, env),
     searchFlipkart(query, env),
+    searchOlx(query, env),
   ]);
   let useDemo = false;
   const all = [];
-  const perSourceLimit = Math.ceil(limit / 2) + 4;
+  const perSourceLimit = Math.ceil(limit / 3) + 4;
 
-  for (const sourceResult of [amazon, flipkart]) {
+  for (const sourceResult of [amazon, flipkart, olx]) {
     if (!sourceResult.ok || !sourceResult.items) continue;
     for (const item of sourceResult.items.slice(0, perSourceLimit)) {
       const pid = productId(item.source, item.source_id);
@@ -452,6 +454,7 @@ async function handleDealsSearch(request, env, cors) {
     source_status: {
       amazon_in: { ok: amazon.ok, count: amazon.items?.length || 0, error: amazon.error || null },
       flipkart: { ok: flipkart.ok, count: flipkart.items?.length || 0, error: flipkart.error || null },
+      olx_in: { ok: olx.ok, count: olx.items?.length || 0, error: olx.error || null },
       demo: { ok: useDemo, count: useDemo ? all.length : 0 },
     },
     demo_mode: useDemo,
