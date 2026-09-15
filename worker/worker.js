@@ -1,5 +1,5 @@
 /**
- * BASED AESTHETICS — TRY-ON WORKER v3
+ * BASED AESTHETICS — TRY-ON WORKER v3 + India Deal Finder
  * Route: basedaesthetics.co/api/tryon*
  *
  * Endpoints:
@@ -9,6 +9,11 @@
  *   GET  /api/tryon/slots            — next bookable slots from GHL calendar
  *   POST /api/tryon/book             — {slot, name, phone, designId, renderId} → GHL contact + appointment
  *
+ * DEALS Endpoints:
+ *   GET  /deals/search?q=monitor&limit=20   — search and score deals
+ *   GET  /deals/best?limit=20               — best current deals
+ *   GET  /deals/item/:id                    — product detail + price history
+ *
  * Secrets: GEMINI_API_KEY, GHL_API_KEY
  * Vars:    DAILY_RENDER_CAP (400), SESSION_RENDER_CAP (6),
  *          GHL_LOCATION_ID, GHL_CALENDAR_ID   (leave unset → /slots & /book return {fallback:true}
@@ -17,6 +22,19 @@
  * MODEL NOTE: gemini-2.5-flash-image retires 2026-10-02 → switch to
  * "gemini-3.1-flash-image-preview" (~₹6/render) if validation prefers it.
  */
+
+import { searchAmazon } from "./deals/scrapers/amazon.js";
+import {
+  upsertProduct,
+  insertPrice,
+  getPriceHistory,
+  logSearch,
+  getProduct,
+  getLatestPrice,
+  listRecentPrices,
+  productId,
+} from "./deals/db.js";
+import { scoreDeals, filterBestDeals } from "./deals/engine.js";
 
 const MODEL = "gemini-2.5-flash-image";
 const GHL_BASE = "https://services.leadconnectorhq.com";
@@ -135,6 +153,15 @@ export default {
       }
       if (url.pathname === "/api/tryon/book" && request.method === "POST") {
         return await handleBook(request, env, cors);
+      }
+      if (url.pathname === "/deals/search" && request.method === "GET") {
+        return await handleDealsSearch(request, env, cors);
+      }
+      if (url.pathname === "/deals/best" && request.method === "GET") {
+        return await handleDealsBest(env, cors);
+      }
+      if (url.pathname.startsWith("/deals/item/") && request.method === "GET") {
+        return await handleDealsItem(url.pathname, env, cors);
       }
     } catch (e) {
       console.error("Unhandled", e);
@@ -351,4 +378,136 @@ function hashIp(request) {
   let h = 0;
   for (let i = 0; i < ip.length; i++) h = (h * 31 + ip.charCodeAt(i)) | 0;
   return "ip" + Math.abs(h).toString(36);
+}
+
+/* ================= DEALS ================= */
+
+async function handleDealsSearch(request, env, cors) {
+  if (!env.DEALS_DB) {
+    return json({ error: "Deal database not configured." }, 503, cors);
+  }
+  const url = new URL(request.url);
+  const query = (url.searchParams.get("q") || "").trim();
+  const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 50);
+  if (!query) return json({ error: "Query parameter `q` is required." }, 400, cors);
+
+  const cacheKey = `deals:search:${query}:${limit}`;
+  const cached = await env.DEALS.get(cacheKey);
+  if (cached) {
+    return json(JSON.parse(cached), 200, cors);
+  }
+
+  const db = env.DEALS_DB;
+  const amazon = await searchAmazon(query, env);
+  const all = [];
+
+  if (amazon.ok && amazon.items) {
+    for (const item of amazon.items.slice(0, limit)) {
+      const pid = productId(item.source, item.source_id);
+      await upsertProduct(db, item);
+      await insertPrice(db, pid, item);
+      const history = await getPriceHistory(db, pid);
+      all.push({ ...item, product_id: pid, history });
+    }
+  }
+
+  await logSearch(db, query, "amazon_in", all.length);
+
+  const historyMap = new Map();
+  for (const item of all) {
+    historyMap.set(item.product_id, item.history);
+  }
+
+  const scored = scoreDeals(all, historyMap);
+  const best = filterBestDeals(scored, 40);
+  const response = {
+    query,
+    source_status: { amazon_in: { ok: amazon.ok, count: amazon.items?.length || 0, error: amazon.error || null } },
+    results: best,
+    total: scored.length,
+  };
+
+  await env.DEALS.put(cacheKey, JSON.stringify(response), { expirationTtl: 1800 });
+  return json(response, 200, cors);
+}
+
+async function handleDealsBest(env, cors) {
+  if (!env.DEALS_DB) {
+    return json({ error: "Deal database not configured." }, 503, cors);
+  }
+  const url = new URL(request.url || "http://localhost/deals/best");
+  const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 50);
+
+  const db = env.DEALS_DB;
+  const rows = await db.prepare(
+    `SELECT p.*, pr.price, pr.list_price, pr.seller, pr.is_fulfilled, pr.availability
+     FROM products p
+     JOIN prices pr ON p.id = pr.product_id
+     WHERE pr.scraped_at = (
+       SELECT MAX(scraped_at) FROM prices WHERE product_id = p.id
+     )
+     ORDER BY pr.scraped_at DESC
+     LIMIT ?`
+  )
+    .bind(limit * 3)
+    .all();
+
+  const items = (rows.results || []).map((r) => ({
+    product_id: r.id,
+    source: r.source,
+    source_id: r.source_id,
+    title: r.title,
+    url: r.url,
+    image: r.image,
+    brand: r.brand,
+    model: r.model,
+    rating: r.rating,
+    review_count: r.review_count,
+    price: r.price,
+    list_price: r.list_price,
+    seller: r.seller,
+    is_fulfilled: r.is_fulfilled,
+    availability: r.availability,
+  }));
+
+  const historyMap = new Map();
+  for (const item of items) {
+    const hist = await getPriceHistory(db, item.product_id);
+    historyMap.set(item.product_id, hist);
+  }
+
+  const scored = scoreDeals(items, historyMap);
+  const best = filterBestDeals(scored, 45).slice(0, limit);
+  return json({ deals: best, total: scored.length }, 200, cors);
+}
+
+async function handleDealsItem(pathname, env, cors) {
+  if (!env.DEALS_DB) {
+    return json({ error: "Deal database not configured." }, 503, cors);
+  }
+  const id = pathname.replace("/deals/item/", "").trim();
+  if (!id) return json({ error: "Product id required." }, 400, cors);
+
+  const db = env.DEALS_DB;
+  const product = await getProduct(db, id);
+  if (!product) return json({ error: "Product not found." }, 404, cors);
+
+  const latest = await getLatestPrice(db, id);
+  const history = await getPriceHistory(db, id, 90 * 86400000);
+
+  return json(
+    {
+      product,
+      latest_price: latest,
+      price_history: history,
+      stats: {
+        min: history.length ? Math.min(...history) : null,
+        max: history.length ? Math.max(...history) : null,
+        avg: history.length ? history.reduce((a, b) => a + b, 0) / history.length : null,
+        samples: history.length,
+      },
+    },
+    200,
+    cors
+  );
 }
