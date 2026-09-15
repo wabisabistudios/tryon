@@ -1,5 +1,5 @@
 /**
- * BASED AESTHETICS — TRY-ON WORKER v3
+ * BASED AESTHETICS — TRY-ON WORKER v3 + India Deal Finder
  * Route: basedaesthetics.co/api/tryon*
  *
  * Endpoints:
@@ -8,6 +8,11 @@
  *   POST /api/tryon                  — render {image, designId, sessionId}
  *   GET  /api/tryon/slots            — next bookable slots from GHL calendar
  *   POST /api/tryon/book             — {slot, name, phone, designId, renderId} → GHL contact + appointment
+ *
+ * DEALS Endpoints:
+ *   GET  /api/deals/search?q=monitor&limit=20   — search and score deals
+ *   GET  /api/deals/best?limit=20               — best current deals
+ *   GET  /api/deals/item/:id                    — product detail + price history
  *
  * Secrets: GEMINI_API_KEY, GHL_API_KEY
  * Vars:    DAILY_RENDER_CAP (400), SESSION_RENDER_CAP (6),
@@ -18,6 +23,22 @@
  * "gemini-3.1-flash-image-preview" (~₹6/render) if validation prefers it.
  */
 
+import { searchAmazon } from "./deals/scrapers/amazon.js";
+import { searchFlipkart } from "./deals/scrapers/flipkart.js";
+import { searchOlx } from "./deals/scrapers/olx.js";
+import { searchDemo } from "./deals/scrapers/demo.js";
+import {
+  upsertProduct,
+  insertPrice,
+  getPriceHistory,
+  logSearch,
+  getProduct,
+  getLatestPrice,
+  listRecentPrices,
+  productId,
+} from "./deals/db.js";
+import { scoreDeals, filterBestDeals } from "./deals/engine.js";
+
 const MODEL = "gemini-2.5-flash-image";
 const GHL_BASE = "https://services.leadconnectorhq.com";
 const GHL_VERSION = "2021-04-15"; // Version header GHL v2 expects; match what the consent Worker uses
@@ -25,6 +46,9 @@ const ALLOWED_ORIGINS = [
   "https://basedaesthetics.co",
   "https://www.basedaesthetics.co",
   "http://localhost:8788",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:5500",
 ];
 
 /**
@@ -135,6 +159,15 @@ export default {
       }
       if (url.pathname === "/api/tryon/book" && request.method === "POST") {
         return await handleBook(request, env, cors);
+      }
+      if (url.pathname === "/api/deals/search" && request.method === "GET") {
+        return await handleDealsSearch(request, env, cors);
+      }
+      if (url.pathname === "/api/deals/best" && request.method === "GET") {
+        return await handleDealsBest(request, env, cors);
+      }
+      if (url.pathname.startsWith("/api/deals/item/") && request.method === "GET") {
+        return await handleDealsItem(url.pathname, env, cors);
       }
     } catch (e) {
       console.error("Unhandled", e);
@@ -351,4 +384,165 @@ function hashIp(request) {
   let h = 0;
   for (let i = 0; i < ip.length; i++) h = (h * 31 + ip.charCodeAt(i)) | 0;
   return "ip" + Math.abs(h).toString(36);
+}
+
+/* ================= DEALS ================= */
+
+async function handleDealsSearch(request, env, cors) {
+  if (!env.DEALS_DB) {
+    return json({ error: "Deal database not configured." }, 503, cors);
+  }
+  const url = new URL(request.url);
+  const query = (url.searchParams.get("q") || "").trim();
+  const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 50);
+  if (!query) return json({ error: "Query parameter `q` is required." }, 400, cors);
+
+  const cacheKey = `deals:search:${query}:${limit}`;
+  const cached = await env.DEALS.get(cacheKey);
+  if (cached) {
+    return json(JSON.parse(cached), 200, cors);
+  }
+
+  const db = env.DEALS_DB;
+  const [amazon, flipkart, olx] = await Promise.all([
+    searchAmazon(query, env),
+    searchFlipkart(query, env),
+    searchOlx(query, env),
+  ]);
+  let useDemo = false;
+  const all = [];
+  const perSourceLimit = Math.ceil(limit / 3) + 4;
+
+  for (const sourceResult of [amazon, flipkart, olx]) {
+    if (!sourceResult.ok || !sourceResult.items) continue;
+    for (const item of sourceResult.items.slice(0, perSourceLimit)) {
+      const pid = productId(item.source, item.source_id);
+      await upsertProduct(db, item);
+      await insertPrice(db, pid, item);
+      const history = await getPriceHistory(db, pid);
+      all.push({ ...item, product_id: pid, history });
+    }
+  }
+
+  // If real scrapers are blocked (common from serverless IPs), fall back to
+  // demo data so the scoring engine and UI remain testable.
+  if (all.length === 0) {
+    const demo = await searchDemo(query, env);
+    if (demo.ok && demo.items) {
+      useDemo = true;
+      for (const item of demo.items.slice(0, limit)) {
+        const pid = productId(item.source, item.source_id);
+        await upsertProduct(db, item);
+        await insertPrice(db, pid, item);
+        const history = item.demo_history || [];
+        all.push({ ...item, product_id: pid, history });
+      }
+    }
+  }
+
+  await logSearch(db, query, useDemo ? "demo" : "all", all.length);
+
+  const historyMap = new Map();
+  for (const item of all) {
+    historyMap.set(item.product_id, item.history);
+  }
+
+  const scored = scoreDeals(all, historyMap);
+  const best = filterBestDeals(scored, 30);
+  const response = {
+    query,
+    source_status: {
+      amazon_in: { ok: amazon.ok, count: amazon.items?.length || 0, error: amazon.error || null },
+      flipkart: { ok: flipkart.ok, count: flipkart.items?.length || 0, error: flipkart.error || null },
+      olx_in: { ok: olx.ok, count: olx.items?.length || 0, error: olx.error || null },
+      demo: { ok: useDemo, count: useDemo ? all.length : 0 },
+    },
+    demo_mode: useDemo,
+    results: best,
+    total: scored.length,
+  };
+
+  await env.DEALS.put(cacheKey, JSON.stringify(response), { expirationTtl: 1800 });
+  return json(response, 200, cors);
+}
+
+async function handleDealsBest(request, env, cors) {
+  if (!env.DEALS_DB) {
+    return json({ error: "Deal database not configured." }, 503, cors);
+  }
+  const url = new URL(request.url);
+  const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 50);
+
+  const db = env.DEALS_DB;
+  const rows = await db.prepare(
+    `SELECT p.*, pr.price, pr.list_price, pr.seller, pr.is_fulfilled, pr.availability
+     FROM products p
+     JOIN prices pr ON p.id = pr.product_id
+     WHERE pr.scraped_at = (
+       SELECT MAX(scraped_at) FROM prices WHERE product_id = p.id
+     )
+     ORDER BY pr.scraped_at DESC
+     LIMIT ?`
+  )
+    .bind(limit * 3)
+    .all();
+
+  const items = (rows.results || []).map((r) => ({
+    product_id: r.id,
+    source: r.source,
+    source_id: r.source_id,
+    title: r.title,
+    url: r.url,
+    image: r.image,
+    brand: r.brand,
+    model: r.model,
+    rating: r.rating,
+    review_count: r.review_count,
+    price: r.price,
+    list_price: r.list_price,
+    seller: r.seller,
+    is_fulfilled: r.is_fulfilled,
+    availability: r.availability,
+  }));
+
+  const historyMap = new Map();
+  for (const item of items) {
+    const hist = await getPriceHistory(db, item.product_id);
+    historyMap.set(item.product_id, hist);
+  }
+
+  const scored = scoreDeals(items, historyMap);
+  const best = scored.slice(0, limit);
+  return json({ deals: best, total: scored.length }, 200, cors);
+}
+
+async function handleDealsItem(pathname, env, cors) {
+  if (!env.DEALS_DB) {
+    return json({ error: "Deal database not configured." }, 503, cors);
+  }
+  const id = pathname.replace("/api/deals/item/", "").trim();
+  if (!id) return json({ error: "Product id required." }, 400, cors);
+
+  const db = env.DEALS_DB;
+  const product = await getProduct(db, id);
+  if (!product) return json({ error: "Product not found." }, 404, cors);
+
+  const latest = await getLatestPrice(db, id);
+  const history = await getPriceHistory(db, id, 90 * 86400000);
+
+  return json(
+    {
+      product,
+      latest_price: latest,
+      price_history: history,
+      stats: {
+        min: history.length ? Math.min(...history) : null,
+        max: history.length ? Math.max(...history) : null,
+        avg: history.length ? history.reduce((a, b) => a + b, 0) / history.length : null,
+        samples: history.length,
+      },
+    },
+    200,
+    cors
+  );
 }

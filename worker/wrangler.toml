@@ -3,13 +3,25 @@ main = "worker.js"
 compatibility_date = "2026-07-01"
 
 routes = [
-  { pattern = "basedaesthetics.co/api/tryon*", zone_name = "basedaesthetics.co" }
+  { pattern = "basedaesthetics.co/api/tryon*", zone_name = "basedaesthetics.co" },
+  { pattern = "basedaesthetics.co/api/deals*", zone_name = "basedaesthetics.co" }
 ]
 
 # wrangler kv namespace create TRYON  →  paste the id below
 [[kv_namespaces]]
 binding = "TRYON"
 id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# wrangler kv namespace create DEALS  →  paste the id below
+[[kv_namespaces]]
+binding = "DEALS"
+id = "REPLACE_WITH_DEALS_KV_NAMESPACE_ID"
+
+# wrangler d1 create deals-db  →  paste the database_id below
+[[d1_databases]]
+binding = "DEALS_DB"
+database_name = "deals-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
 
 [vars]
 DAILY_RENDER_CAP = "400"
